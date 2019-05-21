@@ -16,8 +16,8 @@ from users.serializers import (
 )
 from cride.users.models import User
 
-@api_view(["GET"])
-def login(self, request):
+@api_view(["POST"])
+def login(request):
       serealizer = UserLoginSerializer(data = request.data)
       serealizer.is_valid(raise_exception =True)
       user, token = serealizer.save()
@@ -39,7 +39,7 @@ def signup(request):
 
 
 @api_view(["POST"])
-def verify(self, request):
+def verify(request):
       serealizer = AccountVerificationSerializer(data = request.data)
       serealizer.is_valid(raise_exception =True)
       serealizer.save()
