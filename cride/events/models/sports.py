@@ -4,7 +4,6 @@ from django.db import models
 #Utilities
 from cride.utils.models import BetmatcherModel
 
-
 class Sport(BetmatcherModel):
   name = models.CharField(max_length = 15, unique= True)
   icon = models.ImageField(
