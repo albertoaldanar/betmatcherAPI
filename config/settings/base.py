@@ -48,8 +48,8 @@ THIRD_PARTY_APPS = [
   "rest_framework.authtoken"
 ]
 LOCAL_APPS = [
-  "cride.users.apps.UsersAppConfig",
-  "cride.events.apps.EventsAppConfig"
+  "cride.events.apps.EventsAppConfig",
+  "cride.users.apps.UsersAppConfig"
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 

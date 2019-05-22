@@ -15,7 +15,6 @@ class BetmatcherModel(models.Model):
     help_text = "Date time when object was modified"
   )
 
-
   class Meta:
     abstract = True
     get_latest_by = "created"

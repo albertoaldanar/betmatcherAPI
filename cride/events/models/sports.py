@@ -12,3 +12,9 @@ class Sport(BetmatcherModel):
     blank = False,
   )
   show = models.BooleanField(default = True)
+
+  def __str__(self):
+    return self.name
+
+  class Meta(BetmatcherModel.Meta):
+    ordering = ["-created", "-modified"]

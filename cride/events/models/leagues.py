@@ -5,7 +5,7 @@ from django.db import models
 from cride.utils.models import BetmatcherModel
 
 class League(BetmatcherModel):
-""""League model"""
+  """League model"""
   name = models.CharField(max_length = 15, blank = False)
   sport = models.ForeignKey(
     "events.Sport",

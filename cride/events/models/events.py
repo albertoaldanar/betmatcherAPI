@@ -8,11 +8,11 @@ class Event(BetmatcherModel):
   top_event = models.BooleanField(default = False)
   league = models.ForeignKey(
     "events.League",
-    on_delete = models.SET_NULL
+    on_delete = models.CASCADE
   )
   sport = models.ForeignKey(
     "events.Sport",
-    on_delete = models.SET_NULL
+    on_delete = models.CASCADE
   )
   local = models.CharField(max_length = 15, unique= True)
   visit = models.CharField(max_length = 15, unique= True)
