@@ -14,8 +14,19 @@ class Event(BetmatcherModel):
     "events.Sport",
     on_delete = models.CASCADE
   )
-  local = models.CharField(max_length = 15, unique= True)
-  visit = models.CharField(max_length = 15, unique= True)
+  # local = models.CharField(max_length = 15, unique= True)
+  # visit = models.CharField(max_length = 15, unique= True)
+  local = models.ForeignKey(
+    "events.Team",
+    on_delete = models.CASCADE,
+    related_name = "local_team"
+  )
+  visit = models.ForeignKey(
+    "events.Team",
+    on_delete = models.CASCADE,
+    related_name = "visit_team"
+  )
+
   date = models.DateTimeField(
     "event_date",
     help_text = "Date of the event"

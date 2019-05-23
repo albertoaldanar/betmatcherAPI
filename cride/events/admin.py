@@ -30,7 +30,7 @@ class LeagueAdmin(admin.ModelAdmin):
 
 
 @admin.register(Team)
-class SportAdmin(admin.ModelAdmin):
+class TeamAdmin(admin.ModelAdmin):
   list_display= (
     "name",
     "league"
@@ -40,7 +40,7 @@ class SportAdmin(admin.ModelAdmin):
 
 
 @admin.register(Event)
-class SportAdmin(admin.ModelAdmin):
+class EventAdmin(admin.ModelAdmin):
   list_display= (
     "top_event",
     "league","sport",
