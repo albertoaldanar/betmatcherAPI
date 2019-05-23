@@ -18,3 +18,4 @@ class Sport(BetmatcherModel):
 
   class Meta(BetmatcherModel.Meta):
     ordering = ["-created", "-modified"]
+

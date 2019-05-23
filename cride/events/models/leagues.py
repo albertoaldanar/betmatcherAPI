@@ -13,3 +13,6 @@ class League(BetmatcherModel):
   )
   show = models.BooleanField(default = True)
   order = models.PositiveIntegerField(null = True)
+
+  def __str__(self):
+    return self.name
