@@ -1,13 +1,13 @@
 """Request models design """
 
 #Django
-from django.db import Models
+from django.db import models
 
 #Utilis
 from cride.utils.models import BetmatcherModel
 
 class Request(BetmatcherModel):
-  user = models.ForeignKey(
+  back_user = models.ForeignKey(
     "users.User",
     on_delete = models.CASCADE
   )
@@ -15,7 +15,7 @@ class Request(BetmatcherModel):
     "events.Event",
     on_delete = models.CASCADE
   )
-  team_selected = models.CharField(max_length = 20, unique = False)
+  back_team = models.CharField(max_length = 20, unique = False)
 
   is_matched = models.BooleanField(default = False)
   amount = models.PositiveIntegerField(default = 0)
