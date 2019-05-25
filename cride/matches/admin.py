@@ -18,6 +18,9 @@ class RequestAdmin(admin.ModelAdmin):
   )
 
   search_fields = ("event",)
+  list_filter = (
+   "is_matched",
+  )
 
 
 @admin.register(Match)
