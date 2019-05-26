@@ -14,5 +14,11 @@ class League(BetmatcherModel):
   show = models.BooleanField(default = True)
   order = models.PositiveIntegerField(null = True)
 
+  image = models.ImageField(
+    "league_image",
+    upload_to = "users/pictures",
+    blank = False,
+  )
+
   def __str__(self):
     return self.name

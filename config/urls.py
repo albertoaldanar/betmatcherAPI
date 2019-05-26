@@ -9,5 +9,6 @@ urlpatterns = [
     # Django Admin
     path(settings.ADMIN_URL, admin.site.urls),
     path("", include(("cride.users.urls", "users"), namespace ="users")),
+    path("", include(("cride.events.urls", "events"), namespace ="events")),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

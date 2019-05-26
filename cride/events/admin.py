@@ -38,7 +38,6 @@ class TeamAdmin(admin.ModelAdmin):
   search_fields = ("name",)
 
 
-
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
   list_display= (
