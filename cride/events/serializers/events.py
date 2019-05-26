@@ -9,16 +9,40 @@ from django.db import models
 #Serializer
 from cride.events.serializers import TeamModelSerializer
 
-class EventModelSerializer(serializers.ModelSerializer):
+class EventModelSerializer(serializers.BaseSerializer):
 
-  local = TeamModelSerializer(read_only = True)
-  visit = TeamModelSerializer(read_only = True)
+  def to_representation(self, obj):
 
-  class Meta:
-    """Meta class"""
-    model = Event
-    fields= (
-      "traded", "matched_bets", "local", "unmatched_bets", "visit"
-    )
+        if obj.sport.name == "Soccer":
+          return {
+              'local': {
+                'name': obj.local.name,
+                'quotes': {obj.position_visit: obj.relation_l_v, obj.position_draw: obj.relation_l_d,},
+                'position': obj.position_local
+              },
+              'draw': {
+                'name': "Draw",
+                'quotes': {obj.position_local: obj.relation_l_d, obj.position_visit: obj.relation_v_d},
+                'position': obj.position_draw
+              },
+              'visit': {
+                'name': obj.visit.name,
+                'quotes': {obj.position_local: obj.relation_l_v, obj.position_draw: obj.relation_v_d},
+                'position': obj.position_visit
+              }
+          }
+        else:
+          return {
+              'local': {
+                'name': obj.local.name,
+                'quotes': obj.relation_l_v,
+                'position': obj.position_local
+              },
+              'visit': {
+                'name': obj.visit.name,
+                'quotes': obj.relation_l_v,
+                'position': obj.position_visit
+              },
+          }
 
 
