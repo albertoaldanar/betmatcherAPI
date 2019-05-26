@@ -8,10 +8,11 @@ from django.db import models
 
 #Serializer
 from cride.users.serializers import UserModelSerializer
-from cride.events.serializers import TeamModelSerializer
+from cride.events.serializers import EventModelSerializer
 
 class RequestModelSerializer(serializers.ModelSerializer):
   back_user = UserModelSerializer(read_only = True)
+  event = EventModelSerializer(read_only = True)
 
   class Meta:
     """Meta class"""
