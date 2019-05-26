@@ -7,9 +7,13 @@ from cride.events.models import Event
 from django.db import models
 
 #Serializer
-from cride.events.serializers import TeamModelSerializer
+from cride.events.serializers import (
+  TeamModelSerializer,
+  LeagueModelSerializer,
+  SportModelSerializer
+)
 
-class EventModelSerializer(serializers.BaseSerializer):
+class EventDesignModelSerializer(serializers.BaseSerializer):
 
   def to_representation(self, obj):
 
@@ -29,7 +33,8 @@ class EventModelSerializer(serializers.BaseSerializer):
                 'name': obj.visit.name,
                 'quotes': {obj.position_local: obj.relation_l_v, obj.position_draw: obj.relation_v_d},
                 'position': obj.position_visit
-              }
+              },
+              "data": EventModelSerializer(obj).data
           }
         else:
           return {
@@ -43,6 +48,21 @@ class EventModelSerializer(serializers.BaseSerializer):
                 'quotes': obj.relation_l_v,
                 'position': obj.position_visit
               },
+              "data": EventModelSerializer(obj).data
           }
+
+class EventModelSerializer(serializers.ModelSerializer):
+
+  sport = SportModelSerializer(read_only = True)
+  league = LeagueModelSerializer(read_only = True)
+
+  class Meta:
+    """Meta class"""
+    model = Event
+    fields= (
+      "name", "date", "traded", "unmatched_bets",
+      "matched_bets", "score_local", "score_visit",
+      "sport", "league", "top_bet", "name", "in_play",
+    )
 
 

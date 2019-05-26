@@ -6,7 +6,11 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.decorators import api_view
 #Serializer
-from cride.events.serializers import LeagueModelSerializer, EventModelSerializer
+from cride.events.serializers import(
+  LeagueModelSerializer,
+  EventModelSerializer,
+  EventDesignModelSerializer
+)
 from cride.matches.serializers import RequestModelSerializer
 #Models
 from cride.events.models import League, Event
@@ -32,7 +36,7 @@ def home_data(request):
       }
 
       data = {
-        "top_traded": EventModelSerializer(events, many= True).data,
+        "top_traded": EventDesignModelSerializer(events, many= True).data,
         "leagues": LeagueModelSerializer(leagues, many = True).data,
         "top_request": RequestModelSerializer(requests, many = True).data,
       }
@@ -47,7 +51,7 @@ def top_events(request):
       ).order_by("date")
 
       data = {
-        "top_events": EventModelSerializer(top_events, many= True).data
+        "top_events": EventDesignModelSerializer(top_events, many= True).data
       }
 
       return Response(data)
