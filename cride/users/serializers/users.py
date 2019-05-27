@@ -11,22 +11,26 @@ from rest_framework.validators import UniqueValidator
 from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 #Models
-from cride.users.models import User
+from cride.users.models import User, Profile
 #utilities
 from datetime import timedelta
 import jwt
 
 from django.db import models
+#Serializer
+from .profiles import ProfileModelSerializer
 
 class UserModelSerializer(serializers.ModelSerializer):
+
+  profile = ProfileModelSerializer(read_only = True)
 
   class Meta:
     model = User
     fields = (
+      "profile",
       "username",
       "first_name",
       "last_name",
-      "country"
     )
 
 class UserSignUpSerializer(serializers.Serializer):
@@ -57,6 +61,7 @@ class UserSignUpSerializer(serializers.Serializer):
   def create(self, data):
     data.pop("password_confirmation")
     user = User.objects.create_user(**data)
+    profile = Profile.objects.create(users = user)
     self.send_confrimation_email(user)
     return user
 
