@@ -5,6 +5,9 @@ from django.db import models
 from cride.utils.models import BetmatcherModel
 
 class Match(BetmatcherModel):
+
+  description = models.SlugField(max_length = 225)
+
   back_user = models.ForeignKey(
     "users.User",
     related_name = "user_lay",
@@ -30,7 +33,7 @@ class Match(BetmatcherModel):
   amount = models.PositiveIntegerField(default = 0)
 
   def __str__(self):
-    return self
+    return self.lay_team
 
   class Meta(BetmatcherModel.Meta):
     ordering = ["-created", "-modified"]

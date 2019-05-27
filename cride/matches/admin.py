@@ -29,10 +29,11 @@ class RequestMatch(admin.ModelAdmin):
     "request",
     "is_finished",
     "amount",
+    "back_user",
+    "back_team",
     "lay_user",
     "lay_team",
-    "back_user",
-    "back_team"
+
   )
 
   search_fields = ("event",)
