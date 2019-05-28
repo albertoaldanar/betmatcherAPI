@@ -10,6 +10,6 @@ class ProfileModelSerializer(serializers.ModelSerializer):
   class Meta:
     model = Profile
     fields = (
-      "lost", "won", "draw", "country"
-      "efficiency",
+      "lost", "won", "draw", "country",
+      "efficiency", "picture"
     )

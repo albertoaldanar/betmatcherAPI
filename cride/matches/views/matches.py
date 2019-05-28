@@ -29,9 +29,7 @@ def matches(request):
         back_user= request.user
       ).order_by("created")
 
-      matches = Match.objects.filter(
-        Q(back_user = request.user) | Q(lay_user = request.user)
-      ).order_by("created")
+      matches = Match.objects.filter(Q(back_user = request.user) | Q(lay_user = request.user)).order_by("created")
 
       matched_bets = matches.filter(is_finished = False)
       finished_bets = matches.filter(is_finished = True)

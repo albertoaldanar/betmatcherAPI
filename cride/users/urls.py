@@ -8,7 +8,6 @@ from rest_framework.routers import DefaultRouter
 #   path("users/login", login),
 #   path("users/signup", signup)
 # ]
-
 #DRF
 from .views import users as user_views
 
