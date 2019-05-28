@@ -55,6 +55,8 @@ class EventModelSerializer(serializers.ModelSerializer):
 
   sport = SportModelSerializer(read_only = True)
   league = LeagueModelSerializer(read_only = True)
+  local = TeamModelSerializer(read_only = True)
+  visit = TeamModelSerializer(read_only = True)
 
   class Meta:
     """Meta class"""
@@ -63,6 +65,7 @@ class EventModelSerializer(serializers.ModelSerializer):
       "name", "date", "traded", "unmatched_bets",
       "matched_bets", "score_local", "score_visit",
       "sport", "league", "top_bet", "name", "in_play",
+      "local", "visit"
     )
 
 
