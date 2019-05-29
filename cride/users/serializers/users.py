@@ -46,8 +46,6 @@ class UserSignUpSerializer(serializers.Serializer):
 
   password = serializers.CharField(min_length=  8, max_length = 64)
   password_confirmation = serializers.CharField(min_length=  8, max_length = 64)
-  first_name = serializers.CharField(min_length = 2, max_length = 30)
-  last_name = serializers.CharField(min_length = 2, max_length = 30)
 
   def validate(self, data):
     password = data["password"]
@@ -61,9 +59,10 @@ class UserSignUpSerializer(serializers.Serializer):
   def create(self, data):
     data.pop("password_confirmation")
     user = User.objects.create_user(**data)
-    profile = Profile.objects.create(users = user)
+    profile = Profile.objects.create(user = user)
     self.send_confrimation_email(user)
-    return user
+    token, created = Token.objects.get_or_create(user = user)
+    return user, token.key
 
   def send_confrimation_email(self, user):
     verifcation_token = self.gen_verification_token(user)

@@ -16,7 +16,6 @@ class League(BetmatcherModel):
 
   image = models.ImageField(
     "league_image",
-    upload_to = "users/pictures",
     blank = False,
   )
 
