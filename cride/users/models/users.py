@@ -21,8 +21,7 @@ class User(BetmatcherModel, AbstractUser):
     help_text = ("User´s country")
   )
 
-  USERNAME_FIELD = "email"
-  REQUIRED_FIELDS = ["username"]
+  USERNAME_FIELD = "username"
 
 
   def __str__(self):

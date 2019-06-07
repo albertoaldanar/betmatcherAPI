@@ -26,7 +26,7 @@ def matches(request):
 
       unmatched_bets = Request.objects.filter(
         is_matched = False,
-        back_user= request.user
+        back_user = request.user
       ).order_by("created")
 
       matches = Match.objects.filter(Q(back_user = request.user) | Q(lay_user = request.user)).order_by("created")

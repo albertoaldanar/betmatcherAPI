@@ -61,8 +61,8 @@ class UserSignUpSerializer(serializers.Serializer):
     user = User.objects.create_user(**data)
     profile = Profile.objects.create(user = user)
     self.send_confrimation_email(user)
-    token, created = Token.objects.get_or_create(user = user)
-    return user, token.key
+    jwt, created = Token.objects.get_or_create(user = user)
+    return user, jwt.key
 
   def send_confrimation_email(self, user):
     verifcation_token = self.gen_verification_token(user)
@@ -91,11 +91,13 @@ class UserSignUpSerializer(serializers.Serializer):
 #Login user
 class UserLoginSerializer(serializers.Serializer):
   """Login data"""
-  email = serializers.EmailField()
+  username = serializers.CharField(
+    min_length = 6, max_length = 20,
+  )
   password = serializers.CharField(min_length =8, max_length =64)
 
   def validate(self, data):
-      user = authenticate(username = data["email"], password = data["password"])
+      user = authenticate(username = data["username"], password = data["password"])
       if not user:
           raise serializers.ValidationError("Invalid credential")
       self.context["user"] = user

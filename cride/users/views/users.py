@@ -48,7 +48,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
 
       data = {
         "user": UserModelSerializer(user).data,
-        "acces_token": token
+        "jwt": token
       }
       return Response(data, status = status.HTTP_201_CREATED)
 
@@ -57,10 +57,10 @@ class UserViewSet(mixins.RetrieveModelMixin,
   def signup(self, request):
       serealizer = UserSignUpSerializer(data = request.data)
       serealizer.is_valid(raise_exception =True)
-      user, token = serealizer.save()
+      user, jwt = serealizer.save()
       data = {
         "user": UserModelSerializer(user).data,
-        "token": token
+        "jwt": jwt
       }
       return Response(data, status = status.HTTP_201_CREATED)
 

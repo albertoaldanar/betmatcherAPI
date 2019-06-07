@@ -3,8 +3,9 @@ from django.urls import path, include
 
 #Views
 from cride.matches.views import matches
-# from .views import matches as matches_views
-# from rest_framework.routers import DefaultRouter
+from .views import requests as requests_views
+#DRF
+from rest_framework.routers import DefaultRouter
 
 # router  = DefaultRouter()
 # router.register(r"matches", matches_views.MatchesViewSet, basename = "matches")
@@ -12,6 +13,13 @@ from cride.matches.views import matches
 # urlpatterns = [
 #     path("", include(router.urls))
 # ]
+router  = DefaultRouter()
+router.register(r"requests", requests_views.RequestViewSet, basename = "request")
+
 urlpatterns = [
-  path("matches/", matches)
+  path("matches/", matches),
+  path("", include(router.urls))
 ]
+
+
+

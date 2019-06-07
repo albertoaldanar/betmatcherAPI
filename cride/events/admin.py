@@ -41,6 +41,7 @@ class TeamAdmin(admin.ModelAdmin):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
   list_display= (
+    "id",
     "top_event",
     "league","sport",
     "local","visit",

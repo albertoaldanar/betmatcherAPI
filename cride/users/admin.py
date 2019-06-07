@@ -11,7 +11,7 @@ from cride.users.models import User, Profile
 class CustomUserAdmin(UserAdmin):
   """User admin"""
 
-  list_display = ("email", "username", "first_name", "country")
+  list_display = ("email", "username", "id", "first_name", "country")
   list_filter = ("created", "modified", "username")
 
 
