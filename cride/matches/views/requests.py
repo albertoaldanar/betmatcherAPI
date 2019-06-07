@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import generics
 from rest_framework import status, mixins, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.decorators import action
@@ -15,17 +16,10 @@ from cride.users.serializers import UserModelSerializer
 from cride.users.models import User
 from cride.matches.models import Request
 
-class RequestViewSet(mixins.RetrieveModelMixin,
-                      mixins.CreateModelMixin,
-                      mixins.UpdateModelMixin,
-                      mixins.ListModelMixin,
-                      viewsets.GenericViewSet):
-  """User view set"""
-  """Handle Login, SignUp y verification"""
-
+class RequestViewSet(generics.ListAPIView, viewsets.ViewSet):
+  """Request view set"""
 
   serializer_class = RequestModelSerializer
-
   # def get_permissions(self):
   #   """Asign Permission based on action"""
   #   if self.action in ["signup", "login", "verify"]:
@@ -36,18 +30,21 @@ class RequestViewSet(mixins.RetrieveModelMixin,
   #       permissions = [IsAuthenticated]
   #   return [p() for p in permissions]
 
-  def get_queryset(self):
-        queryset = Request.objects.all()
-        back_user = self.request.query_params.get('back_user')
-        back_team = self.request.query_params.get('back_team')
-        event = self.request.query_params.get('event')
+  # def get_queryset(self):
+  #   # user = self.request.user
+  #   back_team = self.request.query_params.get('back_team')
+  #   back_user = self.request.query_params.get('back_user')
+  #   return Request.objects.filter(back_user__username= back_user, back_team= back_team)
 
+  def get_queryset(self):
+        back_user = self.request.query_params.get("back_user")
+        back_team = self.request.query_params.get("back_team")
+        queryset = Request.objects.filter(back_user__username = back_user, back_team= back_team)
         # queryset = queryset.filter(
         #   back_team= back_team
         # )
-
         return queryset
-  # def create(request, *args, **kwargs):
+
   #     """Asign circle admin"""
   #     user = self.request.user
   #     team = self.request.team

@@ -11,8 +11,8 @@ from cride.users.serializers import UserModelSerializer
 from cride.events.serializers import EventModelSerializer
 
 class RequestModelSerializer(serializers.ModelSerializer):
-  back_user = UserModelSerializer(read_only = True)
-  event = EventModelSerializer(read_only = True)
+  back_user = UserModelSerializer()
+  event = EventModelSerializer()
 
   class Meta:
     """Meta class"""
@@ -21,4 +21,7 @@ class RequestModelSerializer(serializers.ModelSerializer):
       "back_user", "back_team", "event",
       "is_matched", "amount", "is_public"
     )
+
+
+
 
