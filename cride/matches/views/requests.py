@@ -30,19 +30,16 @@ class RequestViewSet(generics.ListAPIView, viewsets.ViewSet):
   #       permissions = [IsAuthenticated]
   #   return [p() for p in permissions]
 
-  # def get_queryset(self):
-  #   # user = self.request.user
-  #   back_team = self.request.query_params.get('back_team')
-  #   back_user = self.request.query_params.get('back_user')
-  #   return Request.objects.filter(back_user__username= back_user, back_team= back_team)
-
   def get_queryset(self):
         back_user = self.request.query_params.get("back_user")
         back_team = self.request.query_params.get("back_team")
-        queryset = Request.objects.filter(back_user__username = back_user, back_team= back_team)
-        # queryset = queryset.filter(
-        #   back_team= back_team
-        # )
+        event = self.request.query_params.get("event")
+
+        queryset = Request.objects.filter(
+          is_public = True,
+          is_matched = False,
+          event__name = event
+        ).exclude(back_user__username= back_user, back_team = back_team)
         return queryset
 
   #     """Asign circle admin"""
