@@ -4,6 +4,8 @@ from rest_framework import generics
 from rest_framework import status, mixins, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.decorators import action
+#Django
+from django.db.models import Q
 #Permissions
 from rest_framework.permissions import (
   AllowAny,
@@ -36,10 +38,12 @@ class RequestViewSet(generics.ListAPIView, viewsets.ViewSet):
         event = self.request.query_params.get("event")
 
         queryset = Request.objects.filter(
+          ~Q(back_team = back_team),
+          ~Q(back_user__username = back_user),
           is_public = True,
           is_matched = False,
-          event__name = event
-        ).exclude(back_user__username= back_user, back_team = back_team)
+          event__name = event,
+        )
         return queryset
 
   #     """Asign circle admin"""
