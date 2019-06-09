@@ -11,6 +11,7 @@ from cride.users.serializers import UserModelSerializer
 from cride.events.serializers import EventModelSerializer
 
 class RequestModelSerializer(serializers.ModelSerializer):
+
   back_user = UserModelSerializer()
   event = EventModelSerializer()
 
@@ -22,6 +23,15 @@ class RequestModelSerializer(serializers.ModelSerializer):
       "is_matched", "amount", "is_public"
     )
 
+
+class CreateRequestSerializer(serializers.Serializer):
+  back_user = UserModelSerializer()
+  event = EventModelSerializer()
+  back_team = serializers.CharField(max_length =140)
+  amount = serializers.IntegerField(default = 0)
+
+  def create(self, data):
+    return Request.objects.create(**data)
 
 
 

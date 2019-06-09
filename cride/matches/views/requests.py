@@ -12,13 +12,18 @@ from rest_framework.permissions import (
   IsAuthenticated
 )
 #Serializers
-from cride.matches.serializers import RequestModelSerializer
+from cride.matches.serializers import RequestModelSerializer, CreateRequestSerializer
 from cride.users.serializers import UserModelSerializer
 #models
 from cride.users.models import User
 from cride.matches.models import Request
+from cride.events.models import Event
 
-class RequestViewSet(generics.ListAPIView, viewsets.ViewSet):
+class RequestViewSet(mixins.CreateModelMixin,
+                    mixins.ListModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.RetrieveModelMixin,
+                    viewsets.GenericViewSet):
   """Request view set"""
 
   serializer_class = RequestModelSerializer
@@ -47,23 +52,60 @@ class RequestViewSet(generics.ListAPIView, viewsets.ViewSet):
         return queryset
 
   #     """Asign circle admin"""
-  #     user = self.request.user
-  #     team = self.request.team
-  #     amount = self.request.amount
-  #     event = self.request.event
 
-  #     Request.objects.create(
-  #       back_user = user,
-  #       event= event,
-  #       amount = amount,
-  #       team = team
-  #     )
+  # def create(self, request):
 
+  #   back_user = request.back_user
+  #   back_team = request.back_team
+  #   amount = request.amount
+  #   event = request.event
 
-  # def retrieve(self, request, *args, **kwargs):
-  #     response = super(UserViewSet, self).retrieve(request, *args, **kwargs)
-  #     data = {
-  #       "user": response.data,
-  #     }
-  #     response.data = data
-  #     return response
+  #   r = Request.objects.create(
+  #     back_user = back_user,
+  #     event = event,
+  #     amount = amount,
+  #     back_team = back_team,
+  #   )
+
+  #   return r
+
+  # def create(self, request, *args, **kwargs):
+
+  #   back_user = request.back_user
+  #   back_team = request.back_team
+  #   amount = request.amount
+  #   event = request.event
+
+  #   response = Request.objects.create(
+  #     back_user__username = back_user,
+  #     event__name = event,
+  #     amount = amount,
+  #     back_team = back_team,
+  #   )
+
+  #   return Response(RequestModelSerializer(response.data))
+
+@api_view(["POST"])
+def get_requests(request):
+      # serializer = CreateRequestSerializer(data = request.data)
+      # serializer.is_valid(raise_exception = True)
+      # data = serializer.data
+
+      # req = serializer.save()
+      back_user = User.objects.get(username = request.data["back_user"])
+      event = Event.objects.get(name = request.data["event"])
+
+      response = Request.objects.create(
+        back_user = back_user,
+        event = event,
+        amount = request.data["amount"],
+        back_team = request.data["back_team"]
+      )
+
+      event.traded += int(request.data["amount"])
+      event.unmatched_bets += 1
+
+      event.save()
+
+      return Response(RequestModelSerializer(response).data)
+
