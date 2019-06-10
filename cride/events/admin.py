@@ -41,10 +41,10 @@ class TeamAdmin(admin.ModelAdmin):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
   list_display= (
-    "id",
     "top_event",
-    "league","sport",
+    "league",
     "local","visit",
-    "date", "traded"
+    "date", "traded",
+    "matched_bets", "unmatched_bets"
   )
   search_fields = ("top_event", "league")

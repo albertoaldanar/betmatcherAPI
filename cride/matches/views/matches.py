@@ -49,6 +49,7 @@ def post_match(request):
       back_user = User.objects.get(username = request.data["back_user"])
       lay_user = User.objects.get(username = request.data["lay_user"])
       event = Event.objects.get(name = request.data["event"])
+      req = Request.objects.get(id = request.data["request"])
 
       response = Match.objects.create(
         back_user = back_user,
@@ -56,13 +57,19 @@ def post_match(request):
         amount = request.data["amount"],
         back_team = request.data["back_team"],
         lay_team = request.data["lay_team"],
-        event = event
+        event = event,
+        request = req
       )
 
       data = {"match": MatchModelSerializer(response).data}
 
-      # event.traded += int(request.data["amount"])
-      # event.unmatched_bets += 1
+      req.is_matched = True
+      req.save()
+
+      event.traded += int(request.data["amount"])
+      event.unmatched_bets -=1
+      event.matched_bets +=1
+      event.save()
 
       # event.save()
       return Response(data)

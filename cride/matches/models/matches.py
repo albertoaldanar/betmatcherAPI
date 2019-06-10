@@ -10,7 +10,7 @@ class Match(BetmatcherModel):
 
   back_user = models.ForeignKey(
     "users.User",
-    related_name = "user_lay",
+    related_name = "back_user",
     on_delete = models.CASCADE
   )
   back_team = models.CharField(max_length = 20, unique = False)
@@ -21,9 +21,15 @@ class Match(BetmatcherModel):
     on_delete = models.CASCADE
   )
 
+  request = models.ForeignKey(
+    "matches.Request",
+    related_name = "request",
+    on_delete = models.CASCADE
+  )
+
   lay_user = models.ForeignKey(
     "users.User",
-    related_name = "back_user",
+    related_name = "lay_user",
     on_delete = models.CASCADE
   )
 

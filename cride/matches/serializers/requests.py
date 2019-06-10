@@ -19,7 +19,7 @@ class RequestModelSerializer(serializers.ModelSerializer):
     """Meta class"""
     model = Request
     fields= (
-      "back_user", "back_team", "event",
+      "id", "back_user", "back_team", "event",
       "is_matched", "amount", "is_public"
     )
 
