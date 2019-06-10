@@ -86,7 +86,7 @@ class RequestViewSet(mixins.CreateModelMixin,
   #   return Response(RequestModelSerializer(response.data))
 
 @api_view(["POST"])
-def get_requests(request):
+def post_request(request):
       # serializer = CreateRequestSerializer(data = request.data)
       # serializer.is_valid(raise_exception = True)
       # data = serializer.data
@@ -99,13 +99,16 @@ def get_requests(request):
         back_user = back_user,
         event = event,
         amount = request.data["amount"],
-        back_team = request.data["back_team"]
+        back_team = request.data["back_team"],
+        is_public = request.data["is_public"]
       )
+
+      data = {"requests": RequestModelSerializer(response).data}
 
       event.traded += int(request.data["amount"])
       event.unmatched_bets += 1
 
       event.save()
 
-      return Response(RequestModelSerializer(response).data)
+      return Response(data)
 

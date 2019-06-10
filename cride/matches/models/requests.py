@@ -22,7 +22,7 @@ class Request(BetmatcherModel):
   is_public = models.BooleanField(default = True)
 
   def __str__(self):
-    return self.back_team
+    return self.back_user.username
 
   class Meta(BetmatcherModel.Meta):
     ordering = ["-created", "-modified"]

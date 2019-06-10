@@ -15,9 +15,9 @@ class Match(BetmatcherModel):
   )
   back_team = models.CharField(max_length = 20, unique = False)
 
-  request = models.ForeignKey(
-    "matches.Request",
-    related_name = "request",
+  event = models.ForeignKey(
+    "events.Event",
+    related_name = "event",
     on_delete = models.CASCADE
   )
 
@@ -33,7 +33,7 @@ class Match(BetmatcherModel):
   amount = models.PositiveIntegerField(default = 0)
 
   def __str__(self):
-    return self.lay_team
+    return self.event.name
 
   class Meta(BetmatcherModel.Meta):
     ordering = ["-created", "-modified"]

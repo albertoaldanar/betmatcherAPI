@@ -7,6 +7,7 @@ from cride.utils.models import BetmatcherModel
 class Event(BetmatcherModel):
   top_event = models.BooleanField(default = False)
   in_play = models.BooleanField(default = False)
+  is_finished = models.BooleanField(default = False)
   name = models.CharField(max_length = 30, unique = False, null = True)
   league = models.ForeignKey(
     "events.League",

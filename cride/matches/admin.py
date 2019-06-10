@@ -26,8 +26,7 @@ class RequestAdmin(admin.ModelAdmin):
 @admin.register(Match)
 class RequestMatch(admin.ModelAdmin):
   list_display= (
-    "request",
-    "is_finished",
+    "event",
     "amount",
     "back_user",
     "back_team",

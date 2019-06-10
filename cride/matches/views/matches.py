@@ -18,6 +18,7 @@ from cride.users.serializers import UserModelSerializer
 #Models
 from cride.matches.models import Request, Match
 from cride.users.models import User
+from cride.events.models import Event
 
 @api_view(["GET"])
 def matches(request):
@@ -32,7 +33,7 @@ def matches(request):
       matches = Match.objects.filter(Q(back_user = request.user) | Q(lay_user = request.user)).order_by("created")
 
       matched_bets = matches.filter(is_finished = False)
-      finished_bets = matches.filter(is_finished = True)
+      finished_bets = matches.filter(event__is_finished = True)
 
       data = {
         "unmatched_bets": RequestModelSerializer(unmatched_bets, many= True).data,
@@ -42,20 +43,26 @@ def matches(request):
 
       return Response(data)
 
-# class MatchesViewSet(mixins.CreateModelMixin,
-#                     mixins.ListModelMixin,
-#                     mixins.UpdateModelMixin,
-#                     mixins.RetrieveModelMixin,
-#                     viewsets.GenericViewSet):
 
-#     # serializer_class = RequestModelSerializer
-#     # permission_classes = (IsAuthenticated,)
+@api_view(["POST"])
+def post_match(request):
+      back_user = User.objects.get(username = request.data["back_user"])
+      lay_user = User.objects.get(username = request.data["lay_user"])
+      event = Event.objects.get(name = request.data["event"])
 
-#     # def get_queryset(self):
-#     #   queryset = Request.objects.filter(is_matched = False)
-#     #   # serializer2 = UserModelSerializer(matches, many=True)
-#     #   data = {
-#     #     "top_requests": RequestModelSerializer(queryset, many=True)
-#     #   }
-#     #   return Response(data)
+      response = Match.objects.create(
+        back_user = back_user,
+        lay_user = lay_user,
+        amount = request.data["amount"],
+        back_team = request.data["back_team"],
+        lay_team = request.data["lay_team"],
+        event = event
+      )
 
+      data = {"match": MatchModelSerializer(response).data}
+
+      # event.traded += int(request.data["amount"])
+      # event.unmatched_bets += 1
+
+      # event.save()
+      return Response(data)
