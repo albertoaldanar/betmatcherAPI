@@ -105,11 +105,58 @@ def finish_match(request):
             loseOrLay.lost += 1
             save_users(winOrBack, loseOrLay)
 
-      def score_analysis(user, place, score):
-          pass
-        # if match.back_team == event.local.name && event.score_local > event.score_visit:
-            # self.stats_and_pay()
+      def get_relation():
+            #local vs visit
+            if match.back_team == event.local.name and match.lay_team == event.visit.name:
+                analyse_score(back_user, lay_user, None)
+            elif match.back_team == event.visit.name and match.lay_team == event.local.name:
+                analyse_score(lay_user, back_user, None)
 
-      stats_and_pay(back_user, lay_user, False)
+            #local vs draw
+            elif match.back_team == event.local.name and match.lay_team == "Draw":
+                analyse_score(back_user, None, lay_user)
+            elif match.back_team == "Draw" and match.lay_team == event.local.name:
+                analyse_score(lay_user, None, back_user)
+
+            #visit vs draw
+            elif match.back_team == event.visit.name and match.lay_team == "Draw":
+                analyse_score(None, match.back_user, match.lay_user)
+
+            elif match.back_team == "Draw" and match.lay_team == event.visit.name:
+                analyse_score(None, match.lay_user, match.back_user)
+
+
+      def analyse_score(local, visit, draw):
+
+          score_local = event.score_local
+          score_visit = event.score_visit
+          #Local
+          if score_local > score_visit:
+              if local == None:
+                stats_and_pay(draw, visit, True)
+              elif local!= None and visit == None:
+                stats_and_pay(local, draw, False)
+              elif local!= None and draw == None:
+                stats_and_pay(local, visit, False)
+
+          #Visit
+          elif score_local < score_visit:
+              if visit == None:
+                stats_and_pay(local, draw, True)
+              elif visit!= None and local == None:
+                stats_and_pay(visit, draw, False)
+              elif local!= None and draw == None:
+                stats_and_pay(visit, local, False)
+          #Draw
+          else:
+              if draw == None:
+                stats_and_pay(local, visit, True)
+              elif draw!= None and visit == None:
+                stats_and_pay(draw, local, False)
+              elif draw!= None and local == None:
+                stats_and_pay(draw, visit, False)
+
+
+      get_relation()
 
       return Response(data)
