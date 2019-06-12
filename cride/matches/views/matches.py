@@ -20,6 +20,7 @@ from cride.matches.models import Request, Match
 from cride.users.models import User
 from cride.events.models import Event
 
+
 @api_view(["GET"])
 def matches(request):
 
@@ -71,5 +72,44 @@ def post_match(request):
       event.matched_bets +=1
       event.save()
 
-      # event.save()
+      return Response(data)
+
+
+@api_view(["PUT"])
+def finish_match(request):
+      match = Match.objects.get(id = request.data["match"])
+      event = match.event
+      back_user = match.back_user.profile
+      lay_user = match.lay_user.profile
+
+      event.is_finished = True
+      event.save()
+
+
+      data = {"match": MatchModelSerializer(match).data}
+
+      def save_users(user_a, user_b):
+        user_a.save()
+        user_b.save()
+
+      def stats_and_pay(winOrBack, loseOrLay, draw):
+        if draw:
+            winOrBack.coins += (match.amount / 2)
+            loseOrLay.coins += (match.amount / 2)
+            winOrBack.draw += 1
+            loseOrLay.draw += 1
+            save_users(winOrBack, loseOrLay)
+        else:
+            winOrBack.coins += match.amount
+            winOrBack.won += 1
+            loseOrLay.lost += 1
+            save_users(winOrBack, loseOrLay)
+
+      def score_analysis(user, place, score):
+          pass
+        # if match.back_team == event.local.name && event.score_local > event.score_visit:
+            # self.stats_and_pay()
+
+      stats_and_pay(back_user, lay_user, False)
+
       return Response(data)

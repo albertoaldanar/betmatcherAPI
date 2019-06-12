@@ -17,7 +17,7 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("country", "lost", "won", "draw", "efficiency")
+    list_display = ("country", "won", "draw", "lost", "efficiency")
     search_fields = ("user__email", "user__first_name", "user__last_name")
     list_filter = ("country",)
 

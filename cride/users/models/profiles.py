@@ -17,8 +17,10 @@ class Profile(BetmatcherModel):
   #Stats
   lost = models.PositiveIntegerField(default = 0)
   won = models.PositiveIntegerField(default = 0)
+  coins = models.PositiveIntegerField(default= 0)
   draw = models.PositiveIntegerField(default = 0)
   efficiency = models.FloatField(
     default = 0,
     help_text = "Reputation for rides offered or taken"
   )
+

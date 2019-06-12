@@ -19,7 +19,7 @@ class MatchModelSerializer(serializers.ModelSerializer):
     """Meta class"""
     model = Match
     fields= (
-      "event", "back_user", "back_team",
+      "id", "event", "back_user", "back_team",
       "lay_user", "lay_team",
       "is_finished", "amount"
     )
