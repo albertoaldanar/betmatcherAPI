@@ -42,11 +42,14 @@ class TeamAdmin(admin.ModelAdmin):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
   list_display= (
-    "top_event",
+    "is_finished",
     "league",
     "local","visit",
     "date", "traded",
     "matched_bets", "unmatched_bets"
+  )
+  list_filter = (
+    "top_event",
   )
   search_fields = ("top_event", "league")
 

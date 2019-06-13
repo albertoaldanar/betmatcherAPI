@@ -9,7 +9,6 @@ from django.db import models
 class LeagueModelSerializer(serializers.ModelSerializer):
 
   class Meta:
-    """Meta class"""
     model = League
     fields= (
       "name", "image",

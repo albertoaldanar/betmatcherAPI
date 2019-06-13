@@ -9,16 +9,19 @@ from rest_framework.decorators import api_view
 from cride.events.serializers import(
   LeagueModelSerializer,
   EventModelSerializer,
-  EventDesignModelSerializer
+  EventDesignModelSerializer,
+  SportDesignModelSerializer
 )
 from cride.matches.serializers import RequestModelSerializer
 #Models
-from cride.events.models import League, Event
+from cride.events.models import League, Event, Sport
 from cride.matches.models import Request
 
 
 @api_view(["GET"])
 def home_data(request):
+
+      sports = Sport.objects.filter(show = True)
 
       events = Event.objects.filter(
         top_event = True
@@ -31,14 +34,11 @@ def home_data(request):
         is_matched = False
       )
 
-      serializer_context = {
-        'request': Request(request),
-      }
-
       data = {
         "top_traded": EventDesignModelSerializer(events, many= True).data,
         "leagues": LeagueModelSerializer(leagues, many = True).data,
         "top_request": RequestModelSerializer(requests, many = True).data,
+        "sports": SportDesignModelSerializer(sports, many = True).data
       }
       return Response(data)
 

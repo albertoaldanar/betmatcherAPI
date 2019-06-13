@@ -11,5 +11,5 @@ class ProfileModelSerializer(serializers.ModelSerializer):
     model = Profile
     fields = (
       "lost", "won", "draw", "country",
-      "efficiency", "picture"
+      "efficiency", "picture", "coins"
     )
