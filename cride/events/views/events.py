@@ -20,7 +20,6 @@ from cride.matches.models import Request
 
 @api_view(["GET"])
 def home_data(request):
-
       sports = Sport.objects.filter(show = True)
 
       events = Event.objects.filter(
@@ -45,13 +44,15 @@ def home_data(request):
 
 @api_view(["GET"])
 def top_events(request):
+      sports = Sport.objects.filter(show = True)
 
       top_events = Event.objects.filter(
         top_event = True
       ).order_by("date")
 
       data = {
-        "top_events": EventDesignModelSerializer(top_events, many= True).data
+        "top_events": EventDesignModelSerializer(top_events, many= True).data,
+        "sports": SportDesignModelSerializer(sports, many = True).data
       }
 
       return Response(data)
