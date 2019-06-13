@@ -32,7 +32,9 @@ class RequestMatch(admin.ModelAdmin):
     "back_team",
     "lay_user",
     "lay_team",
-
   )
 
   search_fields = ("event",)
+
+
+
