@@ -1,10 +1,11 @@
 """Events API views"""
 #DRF
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import status, mixins, viewsets
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.decorators import api_view
+from rest_framework import generics
 #Serializer
 from cride.events.serializers import(
   LeagueModelSerializer,
@@ -16,6 +17,24 @@ from cride.matches.serializers import RequestModelSerializer
 #Models
 from cride.events.models import League, Event, Sport
 from cride.matches.models import Request
+
+
+class EventsViewSet(mixins.CreateModelMixin,
+                    mixins.ListModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.RetrieveModelMixin,
+                    viewsets.GenericViewSet):
+  """Event view set"""
+
+  serializer_class = EventDesignModelSerializer
+
+  def get_queryset(self):
+        league = self.request.query_params.get("league")
+
+        queryset = Event.objects.filter(
+          league__name = league,
+        )
+        return queryset
 
 
 @api_view(["GET"])
