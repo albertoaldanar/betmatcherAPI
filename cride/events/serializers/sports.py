@@ -24,7 +24,7 @@ class SportModelSerializer(serializers.ModelSerializer):
     """Meta class"""
     model = Sport
     fields= (
-      "name", "icon",
+      "name", "icon", "img"
     )
 
 

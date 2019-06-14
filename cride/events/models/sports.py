@@ -12,6 +12,7 @@ class Sport(BetmatcherModel):
     blank = False,
   )
   show = models.BooleanField(default = True)
+  img = models.TextField(max_length = 500, blank = True)
 
   def __str__(self):
     return self.name

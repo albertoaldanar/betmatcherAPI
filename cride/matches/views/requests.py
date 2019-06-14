@@ -103,7 +103,7 @@ def post_request(request):
         is_public = request.data["is_public"]
       )
 
-      data = {"requests": RequestModelSerializer(response).data}
+      data = {"request": RequestModelSerializer(response).data}
 
       event.traded += int(request.data["amount"])
       event.unmatched_bets += 1

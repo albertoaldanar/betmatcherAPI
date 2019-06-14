@@ -11,6 +11,6 @@ class LeagueModelSerializer(serializers.ModelSerializer):
   class Meta:
     model = League
     fields= (
-      "name", "image",
+      "name", "image", "img"
     )
 

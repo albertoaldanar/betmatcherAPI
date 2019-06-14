@@ -18,6 +18,6 @@ class League(BetmatcherModel):
     "league_image",
     blank = False,
   )
-
+  img = models.TextField(max_length = 500, blank = True)
   def __str__(self):
     return self.name
