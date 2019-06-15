@@ -105,6 +105,9 @@ def post_request(request):
 
       data = {"request": RequestModelSerializer(response).data}
 
+      back_user.profile.coins -= int(request.data["amount"])
+      back_user.save()
+
       event.traded += int(request.data["amount"])
       event.unmatched_bets += 1
 

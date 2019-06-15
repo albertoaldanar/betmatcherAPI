@@ -15,7 +15,8 @@ class SportDesignModelSerializer(serializers.BaseSerializer):
         leagues = League.objects.filter(sport__id = obj.id)
         return {
           "name": obj.name,
-          "count": len(leagues)
+          "count": len(leagues),
+          "img": obj.img
         }
 
 class SportModelSerializer(serializers.ModelSerializer):

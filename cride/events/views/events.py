@@ -14,6 +14,8 @@ from cride.events.serializers import(
   SportDesignModelSerializer
 )
 from cride.matches.serializers import RequestModelSerializer
+#Utilities
+import heapq
 #Models
 from cride.events.models import League, Event, Sport
 from cride.matches.models import Request
@@ -42,7 +44,8 @@ def home_data(request):
       sports = Sport.objects.filter(show = True)
 
       events = Event.objects.filter(
-        top_event = True
+        top_event = True,
+        is_finished = False
       ).order_by("date")
 
       leagues = League.objects.filter(show = True).order_by('order')
