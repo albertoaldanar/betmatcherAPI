@@ -59,9 +59,10 @@ class EventAdmin(admin.ModelAdmin):
     queryset.update(is_finished = True)
 
 
-    def return_unmatched(request):
-          unmatched_user = request.back_user.profile
-          unmatched_user.coins += request.amount
+    def return_unmatched(req):
+        for r in req:
+          unmatched_user = r.back_user.profile
+          unmatched_user.coins += r.amount
           unmatched_user.save()
 
 
@@ -144,16 +145,16 @@ class EventAdmin(admin.ModelAdmin):
           get_relation()
 
     for event in queryset:
-        request = Request.objects.filter(event__id = event.id, is_matched = False)
+        req = Request.objects.filter(event__id = event.id, is_matched = False)
 
         try:
           match = Match.objects.get(event__id = event.id)
         except Match.DoesNotExist:
           match = None
 
-        if match!= None:
-            payment(match, request, event)
+        if match:
+            payment(match, req, event)
         else:
-            return_unmatched(request)
+            return_unmatched(req)
 
 
