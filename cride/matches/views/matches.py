@@ -69,10 +69,11 @@ def post_match(request):
       req.is_matched = True
       req.save()
 
-      lay_user.profile.coins -= quote
-      lay_user.save()
+      l_u = lay_user.profile
+      l_u.coins -= quote
+      l_u.save()
 
-      event.traded += int(request.data["amount"])
+      event.traded += int(quote)
       event.unmatched_bets -=1
       event.matched_bets +=1
       event.save()

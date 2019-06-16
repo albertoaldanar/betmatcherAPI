@@ -15,7 +15,7 @@ from cride.events.serializers import(
 )
 from cride.matches.serializers import RequestModelSerializer
 #Utilities
-import heapq
+from heapq import nlargest
 #Models
 from cride.events.models import League, Event, Sport
 from cride.matches.models import Request
@@ -55,6 +55,8 @@ def home_data(request):
         is_matched = False
       )
 
+      # rqs = sorted(requests, key= requests.amount, reverse=True)[:5]
+
       data = {
         "top_traded": EventDesignModelSerializer(events, many= True).data,
         "leagues": LeagueModelSerializer(leagues, many = True).data,
@@ -69,7 +71,8 @@ def top_events(request):
       sports = Sport.objects.filter(show = True)
 
       top_events = Event.objects.filter(
-        top_event = True
+        top_event = True,
+        is_finished = False
       ).order_by("date")
 
       data = {

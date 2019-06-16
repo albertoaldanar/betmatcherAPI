@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib import admin
 #model
 from cride.events.models import Sport, League, Team, Event
-from cride.matches.models import Match
+from cride.matches.models import Match, Request
 
 @admin.register(Sport)
 class SportAdmin(admin.ModelAdmin):
@@ -58,9 +58,18 @@ class EventAdmin(admin.ModelAdmin):
   def finish_event(self, request, queryset):
     queryset.update(is_finished = True)
 
-    def payment():
-      for event in queryset:
-          match = Match.objects.get(event__id = event.id)
+
+    def return_unmatched(request):
+          unmatched_user = request.back_user.profile
+          unmatched_user.coins += request.amount
+          unmatched_user.save()
+
+
+    def payment(match, request, event):
+
+          unmatched_user = request.back_user.profile
+          unmatched_user.coins += request.amount
+          unmatched_user.save()
 
           back_user = match.back_user.profile
           lay_user = match.lay_user.profile
@@ -134,6 +143,17 @@ class EventAdmin(admin.ModelAdmin):
 
           get_relation()
 
-    payment()
+    for event in queryset:
+        request = Request.objects.filter(event__id = event.id, is_matched = False)
+
+        try:
+          match = Match.objects.get(event__id = event.id)
+        except Match.DoesNotExist:
+          match = None
+
+        if match!= None:
+            payment(match, request, event)
+        else:
+            return_unmatched(request)
 
 

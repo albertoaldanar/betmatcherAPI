@@ -95,6 +95,8 @@ def post_request(request):
       back_user = User.objects.get(username = request.data["back_user"])
       event = Event.objects.get(name = request.data["event"])
 
+      b = back_user.profile
+
       response = Request.objects.create(
         back_user = back_user,
         event = event,
@@ -105,13 +107,12 @@ def post_request(request):
 
       data = {"request": RequestModelSerializer(response).data}
 
-      back_user.profile.coins -= int(request.data["amount"])
-      back_user.save()
-
       event.traded += int(request.data["amount"])
       event.unmatched_bets += 1
-
       event.save()
+
+      b.coins -= int(request.data["amount"])
+      b.save()
 
       return Response(data)
 
