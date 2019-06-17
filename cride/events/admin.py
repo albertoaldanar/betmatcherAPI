@@ -66,11 +66,9 @@ class EventAdmin(admin.ModelAdmin):
           unmatched_user.save()
 
 
-    def payment(match, request, event):
+    def payment(match, req, event):
 
-          unmatched_user = request.back_user.profile
-          unmatched_user.coins += request.amount
-          unmatched_user.save()
+          return_unmatched(req)
 
           back_user = match.back_user.profile
           lay_user = match.lay_user.profile

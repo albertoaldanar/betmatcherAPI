@@ -21,21 +21,14 @@ from cride.events.models import Event
 
 class RequestViewSet(mixins.CreateModelMixin,
                     mixins.ListModelMixin,
+                    mixins.DestroyModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.RetrieveModelMixin,
-                    viewsets.GenericViewSet):
+                    viewsets.GenericViewSet,
+                    APIView):
   """Request view set"""
 
   serializer_class = RequestModelSerializer
-  # def get_permissions(self):
-  #   """Asign Permission based on action"""
-  #   if self.action in ["signup", "login", "verify"]:
-  #       permissions = [AllowAny]
-  #   elif self.action == ["retrieve", "update", "partial_update"]:
-  #       permissions = [IsAuthenticated, IsAccountOwner]
-  #   else:
-  #       permissions = [IsAuthenticated]
-  #   return [p() for p in permissions]
 
   def get_queryset(self):
         back_user = self.request.query_params.get("back_user")
@@ -69,29 +62,8 @@ class RequestViewSet(mixins.CreateModelMixin,
 
   #   return r
 
-  # def create(self, request, *args, **kwargs):
-
-  #   back_user = request.back_user
-  #   back_team = request.back_team
-  #   amount = request.amount
-  #   event = request.event
-
-  #   response = Request.objects.create(
-  #     back_user__username = back_user,
-  #     event__name = event,
-  #     amount = amount,
-  #     back_team = back_team,
-  #   )
-
-  #   return Response(RequestModelSerializer(response.data))
-
 @api_view(["POST"])
 def post_request(request):
-      # serializer = CreateRequestSerializer(data = request.data)
-      # serializer.is_valid(raise_exception = True)
-      # data = serializer.data
-
-      # req = serializer.save()
       back_user = User.objects.get(username = request.data["back_user"])
       event = Event.objects.get(name = request.data["event"])
 
@@ -113,6 +85,16 @@ def post_request(request):
 
       b.coins -= int(request.data["amount"])
       b.save()
-
       return Response(data)
 
+
+@api_view(["DELETE"])
+def cancel_request(request):
+    req = Request.objects.get(id = request.data["req"])
+    req.delete()
+
+    user = req.back_user.profile
+    user.coins += req.amount
+    user.save()
+
+    return Response(status=status.HTTP_204_NO_CONTENT)
