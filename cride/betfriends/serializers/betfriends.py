@@ -9,7 +9,7 @@ from django.db import models
 #Serializer
 from cride.users.serializers import UserModelSerializer
 
-class UserModelSerializer(serializers.ModelSerializer):
+class BetFriendModelSerializer(serializers.ModelSerializer):
   user_a = UserModelSerializer(read_only = True)
   user_b = UserModelSerializer(read_only = True)
 

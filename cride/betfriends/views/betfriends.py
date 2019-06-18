@@ -27,11 +27,27 @@ from cride.betfriends.models import FriendRequest, BetFriend
 #           sport__name = sport,
 #         )
 #         return queryset
+@api_view(["POST"])
+def create_friendship(request):
+      friend_request = FriendRequest.objects.get(id = request.data["friend_request"])
+      current_user = User.objects.get(username = request.data["current_user"])
+
+      betfriends = BetFriend.objects.create(user_a = request.sent_by, user_b = current_user)
+
+      friend_request.is_accepted = True
+      friend_request.save()
+
+      data = {
+        "betfirends": BetFriendModelSerializer(betfriends).data,
+      }
+      return Response(data)
+
+
 @api_view(["GET"])
 def betfriends_data(request):
-      current_user = User.objects.get(username = request.data["current_user"])
-      betfriends = BetFriend.objects.filter(Q(user_a = current_user) | Q(user_b = current_user)).order_by("created")
-      friend_requests = FriendRequest.objects.filter(Q(sent_by = current_user) | Q(received_by = current_user)).order_by("created")
+      current_user = request.query_params.get("current_user")
+      betfriends = BetFriend.objects.filter(Q(user_a__username = current_user) | Q(user_b__username = current_user)).order_by("created")
+      friend_requests = FriendRequest.objects.filter(Q(sent_by__username = current_user) | Q(received_by__username = current_user)).order_by("created")
 
       data = {
         "betfirends": BetFriendModelSerializer(betfriends, many= True).data,
