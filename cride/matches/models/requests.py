@@ -21,6 +21,13 @@ class Request(BetmatcherModel):
   amount = models.PositiveIntegerField(default = 0)
   is_public = models.BooleanField(default = True)
 
+  direct_user = models.ForeignKey(
+    "users.User",
+    on_delete = models.CASCADE,
+    related_name = "direct_user",
+    null = True
+  )
+
   def __str__(self):
     return self.back_user.username
 

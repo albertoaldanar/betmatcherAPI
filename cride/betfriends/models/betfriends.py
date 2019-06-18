@@ -15,3 +15,10 @@ class BetFriend(BetmatcherModel):
     on_delete = models.CASCADE
   )
 
+  friend_request = models.ForeignKey(
+    "betfriends.FriendRequest",
+    related_name = "friend_request",
+    on_delete = models.CASCADE,
+    null=True
+  )
+
