@@ -52,7 +52,8 @@ def home_data(request):
 
       requests = Request.objects.filter(
         is_public = True,
-        is_matched = False
+        is_matched = False,
+        event__is_finished= False
       )
 
       # rqs = sorted(requests, key= requests.amount, reverse=True)[:5]

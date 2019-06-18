@@ -50,7 +50,8 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
   "cride.events.apps.EventsAppConfig",
   "cride.users.apps.UsersAppConfig",
-  "cride.matches.apps.MatchesAppConfig"
+  "cride.matches.apps.MatchesAppConfig",
+  "cride.betfriends.apps.BetfriendsAppConfig"
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
