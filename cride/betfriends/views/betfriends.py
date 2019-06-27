@@ -12,22 +12,29 @@ from cride.betfriends.serializers import FriendRequestModelSerializer, BetFriend
 from cride.betfriends.models import FriendRequest, BetFriend
 from cride.users.models import User
 
-# class LeaguesViewSet(mixins.CreateModelMixin,
+# class FriendRequestViewSet(mixins.CreateModelMixin,
 #                     mixins.ListModelMixin,
+#                     mixins.DestroyModelMixin,
 #                     mixins.UpdateModelMixin,
 #                     mixins.RetrieveModelMixin,
 #                     viewsets.GenericViewSet):
 #   """Event view set"""
 
-#   serializer_class = LeagueModelSerializer
+#   serializer_class = FriendRequestModelSerializer
 
-#   def get_queryset(self):
-#         sport = self.request.query_params.get("sport")
+#   def get_object(self, notepad_pk):
+#     try:
+#         return FriendRequest.objects.get(pk=notepad_pk)
+#     except Notepad.DoesNotExist:
+#         raise Http404
 
-#         queryset = League.objects.filter(
-#           sport__name = sport,
-#         )
-#         return queryset
+#   def delete(self, request, notepad_pk, format=None):
+#     item = self.get_object(notepad_pk)
+#     item.delete()
+#     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
 @api_view(["POST"])
 def create_friendship(request):
       friend_request = FriendRequest.objects.get(id = request.data["friend_request"])
@@ -40,6 +47,15 @@ def create_friendship(request):
 
       data = {
         "friendship": BetFriendModelSerializer(betfriends).data,
+      }
+      return Response(data)
+
+@api_view(["DELETE"])
+def decline_request(request):
+      friend_request = FriendRequest.objects.get(id = request.data["friend_request"])
+      friend_request.delete()
+      data = {
+        "friendship": "OK",
       }
       return Response(data)
 

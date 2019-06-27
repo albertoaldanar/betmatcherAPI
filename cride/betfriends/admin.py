@@ -16,7 +16,8 @@ class FriendRequestAdmin(admin.ModelAdmin):
   list_display= (
     "is_accepted",
     "received_by",
-    "sent_by"
+    "sent_by",
+    "id"
   )
   search_fields = ("sent_by",)
 
