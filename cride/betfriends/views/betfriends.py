@@ -10,6 +10,7 @@ from django.db.models import Q
 from cride.betfriends.serializers import FriendRequestModelSerializer, BetFriendModelSerializer
 #models
 from cride.betfriends.models import FriendRequest, BetFriend
+from cride.users.models import User
 
 # class LeaguesViewSet(mixins.CreateModelMixin,
 #                     mixins.ListModelMixin,
@@ -32,13 +33,13 @@ def create_friendship(request):
       friend_request = FriendRequest.objects.get(id = request.data["friend_request"])
       current_user = User.objects.get(username = request.data["current_user"])
 
-      betfriends = BetFriend.objects.create(user_a = request.sent_by, user_b = current_user)
+      betfriends = BetFriend.objects.create(user_a = friend_request.sent_by, user_b = current_user)
 
       friend_request.is_accepted = True
       friend_request.save()
 
       data = {
-        "betfirends": BetFriendModelSerializer(betfriends).data,
+        "friendship": BetFriendModelSerializer(betfriends).data,
       }
       return Response(data)
 
@@ -47,7 +48,7 @@ def create_friendship(request):
 def betfriends_data(request):
       current_user = request.query_params.get("current_user")
       betfriends = BetFriend.objects.filter(Q(user_a__username = current_user) | Q(user_b__username = current_user)).order_by("created")
-      friend_requests = FriendRequest.objects.filter(Q(sent_by__username = current_user) | Q(received_by__username = current_user)).order_by("created")
+      friend_requests = FriendRequest.objects.filter(received_by__username = current_user, is_accepted = False).order_by("created")
 
       data = {
         "betfirends": BetFriendModelSerializer(betfriends, many= True).data,

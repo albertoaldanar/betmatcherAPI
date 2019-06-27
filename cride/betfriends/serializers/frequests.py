@@ -16,6 +16,6 @@ class FriendRequestModelSerializer(serializers.ModelSerializer):
   class Meta:
     model = FriendRequest
     fields= (
-      "sent_by", "received_by", "is_accepted"
+      "sent_by", "received_by", "is_accepted", "id"
     )
 

@@ -12,5 +12,6 @@ urlpatterns = [
     path("", include(("cride.events.urls", "events"), namespace ="events")),
     path("", include(("cride.matches.urls", "matches"), namespace ="matches")),
     path("", include(("cride.betfriends.urls", "betfriends"), namespace ="betfriends")),
+    path("", include(("cride.maps.urls", "maps"), namespace ="maps")),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
