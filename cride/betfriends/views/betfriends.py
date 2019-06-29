@@ -67,7 +67,7 @@ def betfriends_data(request):
       friend_requests = FriendRequest.objects.filter(received_by__username = current_user, is_accepted = False).order_by("created")
 
       data = {
-        "betfirends": BetFriendModelSerializer(betfriends, many= True).data,
+        "betfriends": BetFriendModelSerializer(betfriends, many= True).data,
         "friend_requests": FriendRequestModelSerializer(friend_requests, many= True).data,
       }
       return Response(data)

@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status, mixins, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.decorators import action
+from django.db.models import Q
 #Permissions
 from rest_framework.permissions import (
   AllowAny,
@@ -16,9 +17,11 @@ from users.serializers import (
   AccountVerificationSerializer
 )
 from cride.matches.serializers import RequestModelSerializer
+from cride.betfriends.serializers import BetFriendModelSerializer
 #models
 from cride.users.models import User
 from cride.matches.models import Request
+from cride.betfriends.models import BetFriend, FriendRequest
 
 class UserViewSet(mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin,
@@ -75,7 +78,6 @@ class UserViewSet(mixins.RetrieveModelMixin,
 
       return Response(data, status = status.HTTP_200_OK)
 
-
   # @action(detail =True, methods = ["put", "patch"])
   # def profile(self, request, *args, **kwargs):
   #     user = self.get_object()
@@ -98,3 +100,33 @@ class UserViewSet(mixins.RetrieveModelMixin,
       }
       response.data = data
       return response
+
+
+@api_view(["GET"])
+def user_info(request):
+      opponent_param = request.query_params.get("user")
+      current_user_param = request.query_params.get("current_user")
+
+      opponent = User.objects.get(username = opponent_param)
+      current_user = User.objects.get(username = current_user_param)
+
+      try:
+          friend = BetFriend.objects.get(Q(Q(user_a = opponent) & Q(user_b = current_user)) | Q(Q(user_a = current_user) & Q(user_b = opponent)))
+      except BetFriend.DoesNotExist:
+          friends = None
+
+      result = True if friend else False
+      # if result!= True:
+      #   try:
+      #     requested = FriendRequest.objects.get(Q(Q(sent_by = opponent) & Q(received_by = current_user)) | Q(Q(sent_by = current_user) & Q(received_by = opponent)))
+      #   except FriendRequest.DoesNotExist:
+      #     requested = None
+
+      #   result = "Wating" if requested else False
+
+      data = {
+        "user": UserModelSerializer(opponent).data,
+        "result": result
+      }
+
+      return Response(data)
