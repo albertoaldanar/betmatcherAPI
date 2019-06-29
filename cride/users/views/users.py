@@ -130,3 +130,15 @@ def user_info(request):
       }
 
       return Response(data)
+
+@api_view(["GET"])
+def user_live(request):
+      user_param = request.query_params.get("user")
+      user = User.objects.filter(username__icontains = user_param).values()
+
+      data = {
+        "user": UserModelSerializer(user, many = True).data,
+      }
+
+      return Response(data)
+
