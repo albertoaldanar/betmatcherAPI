@@ -113,7 +113,7 @@ def user_info(request):
       try:
           friend = BetFriend.objects.get(Q(Q(user_a = opponent) & Q(user_b = current_user)) | Q(Q(user_a = current_user) & Q(user_b = opponent)))
       except BetFriend.DoesNotExist:
-          friends = None
+          friend = None
 
       result = True if friend else False
       # if result!= True:
@@ -133,11 +133,15 @@ def user_info(request):
 
 @api_view(["GET"])
 def user_live(request):
+      # get http request params
       user_param = request.query_params.get("user")
-      user = User.objects.filter(username__icontains = user_param).values()
+      current_user_param = request.query_params.get("current_user")
+
+      #filter users
+      users = User.objects.filter(Q(username__icontains = user_param), ~Q(username = current_user_param)).values()
 
       data = {
-        "user": UserModelSerializer(user, many = True).data,
+        "users": UserModelSerializer(users, many = True).data,
       }
 
       return Response(data)

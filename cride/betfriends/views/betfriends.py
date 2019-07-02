@@ -60,14 +60,28 @@ def decline_request(request):
       return Response(data)
 
 
+@api_view(["POST"])
+def create_request(request):
+      sent_by = User.objects.get(username = request.data["current_user"])
+      receiver = User.objects.get(username = request.data["receiver"])
+
+      friend_request = FriendRequest.objects.create(sent_by = sent_by, received_by = receiver)
+      data = {
+        "bfrequest": FriendRequestModelSerializer(friend_request).data,
+      }
+      return Response(data)
+
+
 @api_view(["GET"])
 def betfriends_data(request):
       current_user = request.query_params.get("current_user")
       betfriends = BetFriend.objects.filter(Q(user_a__username = current_user) | Q(user_b__username = current_user)).order_by("created")
-      friend_requests = FriendRequest.objects.filter(received_by__username = current_user, is_accepted = False).order_by("created")
+      received_requests = FriendRequest.objects.filter(received_by__username = current_user, is_accepted = False).order_by("created")
+      sent_requests = FriendRequest.objects.filter(sent_by__username = current_user, is_accepted = False).order_by("created")
 
       data = {
         "betfriends": BetFriendModelSerializer(betfriends, many= True).data,
-        "friend_requests": FriendRequestModelSerializer(friend_requests, many= True).data,
+        "received_requests": FriendRequestModelSerializer(received_requests, many= True).data,
+        "sent_requests": FriendRequestModelSerializer(sent_requests, many= True).data,
       }
       return Response(data)
