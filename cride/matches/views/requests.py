@@ -74,7 +74,8 @@ def post_request(request):
         event = event,
         amount = request.data["amount"],
         back_team = request.data["back_team"],
-        is_public = request.data["is_public"]
+        is_public = request.data["is_public"],
+        opponent = request.data["opponent"]
       )
 
       data = {"request": RequestModelSerializer(response).data}
@@ -86,6 +87,17 @@ def post_request(request):
       b.coins -= int(request.data["amount"])
       b.save()
       return Response(data)
+
+
+@api_view(["GET"])
+def direct_bets(request):
+    current_user = self.request.query_params.get("current_user")
+
+    direct_bets = Request.objects.filter(opponent = current_user, is_public = False)
+
+    data = {"direct_bets": RequestModelSerializer(direct_bets).data}
+
+    return Response(data)
 
 
 @api_view(["DELETE"])

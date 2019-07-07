@@ -8,9 +8,11 @@ from django.db.models import Q
 
 #Serializers
 from cride.betfriends.serializers import FriendRequestModelSerializer, BetFriendModelSerializer
+from cride.matches.serializers import RequestModelSerializer
 #models
 from cride.betfriends.models import FriendRequest, BetFriend
 from cride.users.models import User
+from cride.matches.models import Request
 
 # class FriendRequestViewSet(mixins.CreateModelMixin,
 #                     mixins.ListModelMixin,
@@ -79,9 +81,12 @@ def betfriends_data(request):
       received_requests = FriendRequest.objects.filter(received_by__username = current_user, is_accepted = False).order_by("created")
       sent_requests = FriendRequest.objects.filter(sent_by__username = current_user, is_accepted = False).order_by("created")
 
+      direct_bets = Request.objects.filter(opponent = current_user, is_public = False)
+
       data = {
         "betfriends": BetFriendModelSerializer(betfriends, many= True).data,
         "received_requests": FriendRequestModelSerializer(received_requests, many= True).data,
         "sent_requests": FriendRequestModelSerializer(sent_requests, many= True).data,
+        "direct_bets": RequestModelSerializer(direct_bets, many= True).data
       }
       return Response(data)

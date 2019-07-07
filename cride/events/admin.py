@@ -56,7 +56,7 @@ class EventAdmin(admin.ModelAdmin):
   actions = ["finish_event"]
 
   def finish_event(self, request, queryset):
-    queryset.update(is_finished = True)
+    queryset.update(is_finished = True, in_play = False)
 
 
     def return_unmatched(req):
@@ -73,9 +73,10 @@ class EventAdmin(admin.ModelAdmin):
           back_user = match.back_user.profile
           lay_user = match.lay_user.profile
 
-          def save_users(user_a, user_b):
+          def save_users(user_a, user_b, match):
             user_a.save()
             user_b.save()
+            match.save()
 
           def stats_and_pay(winOrBack, loseOrLay, draw):
             if draw:
@@ -83,12 +84,15 @@ class EventAdmin(admin.ModelAdmin):
                 loseOrLay.coins += (match.amount / 2)
                 winOrBack.draw += 1
                 loseOrLay.draw += 1
-                save_users(winOrBack, loseOrLay)
+                match.draw = True
+                save_users(winOrBack, loseOrLay, match)
             else:
                 winOrBack.coins += match.amount
                 winOrBack.won += 1
                 loseOrLay.lost += 1
-                save_users(winOrBack, loseOrLay)
+                match.winner = winOrBack.username
+                match.looser = loseOrLay.username
+                save_users(winOrBack, loseOrLay, match)
 
           def get_relation():
               #local vs visit
@@ -105,10 +109,10 @@ class EventAdmin(admin.ModelAdmin):
 
               #visit vs draw
               elif match.back_team == event.visit.name and match.lay_team == "Draw":
-                  analyse_score(None, match.back_user, match.lay_user)
+                  analyse_score(None, back_user, lay_user)
 
               elif match.back_team == "Draw" and match.lay_team == event.visit.name:
-                  analyse_score(None, match.lay_user, match.back_user)
+                  analyse_score(None, lay_user, back_user)
 
 
           def analyse_score(local, visit, draw):

@@ -15,18 +15,14 @@ class Request(BetmatcherModel):
     "events.Event",
     on_delete = models.CASCADE
   )
+
   back_team = models.CharField(max_length = 20, unique = False)
+  opponent = models.CharField(max_length = 20, unique = False)
 
   is_matched = models.BooleanField(default = False)
   amount = models.PositiveIntegerField(default = 0)
   is_public = models.BooleanField(default = True)
 
-  direct_user = models.ForeignKey(
-    "users.User",
-    on_delete = models.CASCADE,
-    related_name = "direct_user",
-    null = True
-  )
 
   def __str__(self):
     return self.back_user.username

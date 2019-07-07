@@ -13,6 +13,7 @@ class Profile(BetmatcherModel):
     null = True
   )
   country = models.TextField(max_length= 500, blank = True)
+  username = models.CharField(max_length = 20, blank = True, null = True)
 
   #Stats
   lost = models.PositiveIntegerField(default = 0)
@@ -23,4 +24,7 @@ class Profile(BetmatcherModel):
     default = 0,
     help_text = "Reputation for rides offered or taken"
   )
+
+  def __str__(self):
+    return self.username
 

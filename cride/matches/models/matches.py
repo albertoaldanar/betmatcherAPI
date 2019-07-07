@@ -15,6 +15,12 @@ class Match(BetmatcherModel):
   )
   back_team = models.CharField(max_length = 20, unique = False)
 
+  winner = models.CharField(max_length = 20, null = True, blank = True)
+
+  looser = models.CharField(max_length = 20, null = True, blank = True)
+
+  draw = models.BooleanField(default = False)
+
   event = models.ForeignKey(
     "events.Event",
     related_name = "event",

@@ -59,7 +59,7 @@ class UserSignUpSerializer(serializers.Serializer):
   def create(self, data):
     data.pop("password_confirmation")
     user = User.objects.create_user(**data)
-    profile = Profile.objects.create(user = user)
+    profile = Profile.objects.create(user = user, username = user.username)
     self.send_confrimation_email(user)
     jwt, created = Token.objects.get_or_create(user = user)
     return user, jwt.key
