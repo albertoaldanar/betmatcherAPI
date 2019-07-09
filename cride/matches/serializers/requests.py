@@ -20,7 +20,7 @@ class RequestModelSerializer(serializers.ModelSerializer):
     model = Request
     fields= (
       "id", "back_user", "back_team", "event", "opponent",
-      "is_matched", "amount", "is_public"
+      "is_matched", "amount", "is_public", "fq", "sq"
     )
 
 

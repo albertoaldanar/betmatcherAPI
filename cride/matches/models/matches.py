@@ -20,6 +20,7 @@ class Match(BetmatcherModel):
   looser = models.CharField(max_length = 20, null = True, blank = True)
 
   draw = models.BooleanField(default = False)
+  quote = models.IntegerField(null = True)
 
   event = models.ForeignKey(
     "events.Event",
