@@ -22,6 +22,8 @@ class Request(BetmatcherModel):
 
   fq = models.IntegerField(null = True)
   sq = models.IntegerField(blank=True, null=True)
+  fq_position = models.IntegerField(null = True)
+  sq_position = models.IntegerField(blank=True, null=True)
 
   is_matched = models.BooleanField(default = False)
   amount = models.PositiveIntegerField(default = 0)

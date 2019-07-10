@@ -75,7 +75,11 @@ def post_request(request):
         amount = request.data["amount"],
         back_team = request.data["back_team"],
         is_public = request.data["is_public"],
-        opponent = request.data["opponent"]
+        opponent = request.data["opponent"],
+        fq = request.data["fq"],
+        sq = request.data["sq"],
+        fq_position = request.data["fq_position"],
+        sq_position = request.data["sq_position"],
       )
 
       data = {"request": RequestModelSerializer(response).data}
