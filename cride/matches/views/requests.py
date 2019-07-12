@@ -113,4 +113,4 @@ def cancel_request(request):
     user.coins += req.amount
     user.save()
 
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response("Deleted!")

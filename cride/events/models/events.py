@@ -43,9 +43,16 @@ class Event(BetmatcherModel):
   position_local = models.PositiveSmallIntegerField(default = 0)
   position_visit = models.PositiveSmallIntegerField(default = 0)
   position_draw = models.PositiveSmallIntegerField(null = True, blank = True)
+
+
   relation_l_v = models.SmallIntegerField(null = True)
+  relation_v_l = models.SmallIntegerField(null = True)
+
   relation_l_d = models.SmallIntegerField(null = True, blank = True)
+  relation_d_l = models.SmallIntegerField(null = True, blank = True)
+
   relation_v_d = models.SmallIntegerField(null = True, blank = True)
+  relation_d_v = models.SmallIntegerField(null = True, blank = True)
 
   def __str__(self):
     return self.name
