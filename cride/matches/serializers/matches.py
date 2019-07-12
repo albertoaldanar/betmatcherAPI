@@ -21,6 +21,6 @@ class MatchModelSerializer(serializers.ModelSerializer):
     fields= (
       "id", "event", "back_user", "back_team",
       "lay_user", "lay_team", "looser",
-      "is_finished", "amount", "winner",
+      "is_finished", "amount", "winner", "quote"
     )
 

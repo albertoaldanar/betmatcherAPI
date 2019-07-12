@@ -52,7 +52,7 @@ def post_match(request):
       event = Event.objects.get(name = request.data["event"])
       req = Request.objects.get(id = request.data["request"])
 
-      quote = request.data["quote"]
+      traded = request.data["traded"]
 
       response = Match.objects.create(
         back_user = back_user,
@@ -60,6 +60,7 @@ def post_match(request):
         amount = request.data["amount"],
         back_team = request.data["back_team"],
         lay_team = request.data["lay_team"],
+        quote = request.data["quote"],
         event = event,
         request = req
       )
@@ -70,10 +71,10 @@ def post_match(request):
       req.save()
 
       l_u = lay_user.profile
-      l_u.coins -= quote
+      l_u.coins -= traded
       l_u.save()
 
-      event.traded += int(quote)
+      event.traded += int(traded)
       event.unmatched_bets -=1
       event.matched_bets +=1
       event.save()

@@ -80,12 +80,20 @@ class EventAdmin(admin.ModelAdmin):
 
           def stats_and_pay(winOrBack, loseOrLay, draw):
             if draw:
-                winOrBack.coins += (match.amount / 2)
-                loseOrLay.coins += (match.amount / 2)
-                winOrBack.draw += 1
-                loseOrLay.draw += 1
-                match.draw = True
-                save_users(winOrBack, loseOrLay, match)
+                if match.quote > 0:
+                    winOrBack.coins += (match.request.amount)
+                    loseOrLay.coins += (match.request.amount - match.quote)
+                    winOrBack.draw += 1
+                    loseOrLay.draw += 1
+                    match.draw = True
+                    save_users(winOrBack, loseOrLay, match)
+                else:
+                    winOrBack.coins += (match.request.amount + (match.quote * -1))
+                    loseOrLay.coins += (match.request.amount)
+                    winOrBack.draw += 1
+                    loseOrLay.draw += 1
+                    match.draw = True
+                    save_users(winOrBack, loseOrLay, match)
             else:
                 winOrBack.coins += match.amount
                 winOrBack.won += 1
