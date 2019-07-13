@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.decorators import api_view
 from rest_framework import generics
+from operator import itemgetter, attrgetter
 #Django
 from django.db.models import Q
 #Serializer
@@ -63,12 +64,14 @@ def home_data(request):
         event__is_finished= False,
       )
 
-      # rqs = sorted(requests, key= requests.amount, reverse=True)[:5]
+      evs = sorted(events, key=attrgetter("traded"), reverse = True)[:5]
+
+      rqs = sorted(requests, key=attrgetter("created"), reverse = True)[:5]
 
       data = {
-        "top_traded": EventDesignModelSerializer(events, many= True).data,
+        "top_traded": EventDesignModelSerializer(evs, many= True).data,
         "leagues": LeagueModelSerializer(leagues, many = True).data,
-        "top_request": RequestModelSerializer(requests, many = True).data,
+        "top_request": RequestModelSerializer(rqs, many = True).data,
         "sports": SportDesignModelSerializer(sports, many = True).data
       }
       return Response(data)
