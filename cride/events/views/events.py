@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.decorators import api_view
 from rest_framework import generics
+#Django
+from django.db.models import Q
 #Serializer
 from cride.events.serializers import(
   LeagueModelSerializer,
@@ -19,6 +21,7 @@ from heapq import nlargest
 #Models
 from cride.events.models import League, Event, Sport
 from cride.matches.models import Request
+from cride.users.models import User
 
 
 class EventsViewSet(mixins.CreateModelMixin,
@@ -41,6 +44,9 @@ class EventsViewSet(mixins.CreateModelMixin,
 
 @api_view(["GET"])
 def home_data(request):
+      current_user = request.query_params.get("current_user")
+      user = User.objects.get(username = current_user)
+
       sports = Sport.objects.filter(show = True)
 
       events = Event.objects.filter(
@@ -51,9 +57,10 @@ def home_data(request):
       leagues = League.objects.filter(show = True).order_by('order')
 
       requests = Request.objects.filter(
+        ~Q(back_user = user),
         is_public = True,
         is_matched = False,
-        event__is_finished= False
+        event__is_finished= False,
       )
 
       # rqs = sorted(requests, key= requests.amount, reverse=True)[:5]
