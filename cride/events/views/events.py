@@ -93,29 +93,3 @@ def top_events(request):
 
       return Response(data)
 
-
-# @api_view(["GET"])
-# def top_credentials(request):
-#       current_user = request.query_params.get("current_user")
-#       user = User.objects.get(username = current_user)
-
-#       requests = Request.objects.filter(
-#         ~Q(back_user = user),
-#         is_public = True,
-#         is_matched = False,
-#         event__is_finished= False,
-#       )
-
-#       events = Event.objects.filter(
-#         top_event = True,
-#         is_finished = False
-#       ).order_by("date")
-
-#       evs = sorted(events, key=attrgetter("traded"), reverse = True)[:10]
-#       rqs = sorted(requests, key=attrgetter("created"), reverse = True)[:15]
-
-#       data = {
-#         "sports": SportDesignModelSerializer(sports, many = True).data
-#       }
-
-#       return Response(data)
