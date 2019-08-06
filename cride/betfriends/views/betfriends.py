@@ -64,15 +64,16 @@ def decline_request(request):
 
 @api_view(["POST"])
 def create_request(request):
-      sent_by = User.objects.get(username = request.data["current_user"])
+      sent_by = User.objects.get(username = request.data["sent_by"])
       receiver = User.objects.get(username = request.data["receiver"])
 
       friend_request = FriendRequest.objects.create(sent_by = sent_by, received_by = receiver)
+
       data = {
         "bfrequest": FriendRequestModelSerializer(friend_request).data,
       }
       return Response(data)
-
+      
 
 @api_view(["GET"])
 def betfriends_data(request):

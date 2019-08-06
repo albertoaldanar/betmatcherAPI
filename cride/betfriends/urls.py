@@ -8,8 +8,6 @@ from rest_framework.routers import DefaultRouter
 
 # router  = DefaultRouter()
 # router.register(r"bfrequest", bfrequests_views.FriendRequestViewSet, basename = "bfrequest")
-
-
 urlpatterns = [
   path("betfriends_data/", betfriends_data),
   path("create_friendship/", create_friendship),
