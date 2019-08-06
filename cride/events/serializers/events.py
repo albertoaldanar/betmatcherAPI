@@ -21,17 +21,17 @@ class EventDesignModelSerializer(serializers.BaseSerializer):
           return {
               'local': {
                 'name': obj.local.name,
-                'quotes': {obj.position_visit: obj.relation_l_v, obj.position_draw: obj.relation_l_d,},
+                'quotes': {obj.position_visit: obj.relation_v_l, obj.position_draw: obj.relation_d_l,},
                 'position': obj.position_local
               },
               'draw': {
                 'name': "Draw",
-                'quotes': {obj.position_local: obj.relation_d_l, obj.position_visit: obj.relation_d_v},
+                'quotes': {obj.position_local: obj.relation_l_d, obj.position_visit: obj.relation_v_d},
                 'position': obj.position_draw
               },
               'visit': {
                 'name': obj.visit.name,
-                'quotes': {obj.position_local: obj.relation_v_l, obj.position_draw: obj.relation_v_d},
+                'quotes': {obj.position_local: obj.relation_l_v, obj.position_draw: obj.relation_d_v},
                 'position': obj.position_visit
               },
               "data": EventModelSerializer(obj).data
@@ -40,12 +40,12 @@ class EventDesignModelSerializer(serializers.BaseSerializer):
           return {
               'local': {
                 'name': obj.local.name,
-                'quotes': obj.relation_l_v,
+                'quotes': obj.relation_v_l,
                 'position': obj.position_local
               },
               'visit': {
                 'name': obj.visit.name,
-                'quotes': obj.relation_v_l,
+                'quotes': obj.relation_l_v,
                 'position': obj.position_visit
               },
               "data": EventModelSerializer(obj).data

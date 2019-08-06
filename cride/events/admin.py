@@ -3,7 +3,7 @@
 from django.db import models
 from django.contrib import admin
 #model
-from cride.events.models import Sport, League, Team, Event
+from cride.events.models import Sport, League, Team, Event, Banner
 from cride.matches.models import Match, Request
 
 @admin.register(Sport)
@@ -29,6 +29,14 @@ class LeagueAdmin(admin.ModelAdmin):
    "sport",
   )
 
+@admin.register(Banner)
+class BannerAdmin(admin.ModelAdmin):
+  list_display= (
+    "img",
+    "title",
+    "message",
+  )
+  search_fields = ("title",)
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):

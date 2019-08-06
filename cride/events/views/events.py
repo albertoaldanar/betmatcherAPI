@@ -14,13 +14,14 @@ from cride.events.serializers import(
   LeagueModelSerializer,
   EventModelSerializer,
   EventDesignModelSerializer,
-  SportDesignModelSerializer
+  SportDesignModelSerializer,
+  BannerModelSerializer
 )
 from cride.matches.serializers import RequestModelSerializer
 #Utilities
 from heapq import nlargest
 #Models
-from cride.events.models import League, Event, Sport
+from cride.events.models import League, Event, Sport, Banner
 from cride.matches.models import Request
 from cride.users.models import User
 
@@ -57,6 +58,8 @@ def home_data(request):
 
       leagues = League.objects.filter(show = True).order_by('order')
 
+      banners = Banner.objects.all().order_by("order")
+
       requests = Request.objects.filter(
         ~Q(back_user = user),
         is_public = True,
@@ -72,7 +75,8 @@ def home_data(request):
         "top_traded": EventDesignModelSerializer(evs, many= True).data,
         "leagues": LeagueModelSerializer(leagues, many = True).data,
         "top_request": RequestModelSerializer(rqs, many = True).data,
-        "sports": SportDesignModelSerializer(sports, many = True).data
+        "sports": SportDesignModelSerializer(sports, many = True).data,
+        "banners": BannerModelSerializer(banners, many = True).data
       }
       return Response(data)
 
