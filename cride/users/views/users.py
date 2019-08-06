@@ -115,7 +115,16 @@ def user_info(request):
       except BetFriend.DoesNotExist:
           friend = None
 
-      result = True if friend else False
+      friend_result = True if friend else False
+
+
+      try:
+          requested = FriendRequest.objects.get(Q(Q(sent_by = opponent) & Q(received_by = current_user) & Q(is_accepted = False)) | Q(Q(received_by = opponent) & Q(sent_by = current_user) & Q(is_accepted = False)))
+      except FriendRequest.DoesNotExist:
+          requested = None
+
+      requested_result = True if requested else False
+
       # if result!= True:
       #   try:
       #     requested = FriendRequest.objects.get(Q(Q(sent_by = opponent) & Q(received_by = current_user)) | Q(Q(sent_by = current_user) & Q(received_by = opponent)))
@@ -126,7 +135,8 @@ def user_info(request):
 
       data = {
         "user": UserModelSerializer(opponent).data,
-        "result": result
+        "friendship": friend_result,
+        "requested": requested_result
       }
 
       return Response(data)
