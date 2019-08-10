@@ -147,14 +147,14 @@ def user_live(request):
       user_param = request.query_params.get("user")
       current_user_param = request.query_params.get("current_user")
 
-      #filter users
-      if user_param :
-        users = User.objects.filter(Q(username__icontains = user_param), ~Q(username = current_user_param)).values()
-      else:
-        users = User.objects.filter(username = current_user_param)
+      try:
+          user = User.objects.get(username = user_param)
+      except User.DoesNotExist:
+          user = User.objects.get(username = current_user_param)
+
 
       data = {
-        "users": UserModelSerializer(users, many = True).data,
+        "user": UserModelSerializer(user).data,
       }
 
       return Response(data)
