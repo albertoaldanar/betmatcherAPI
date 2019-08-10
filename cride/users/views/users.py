@@ -104,27 +104,47 @@ class UserViewSet(mixins.RetrieveModelMixin,
 
 @api_view(["GET"])
 def user_info(request):
-      opponent_param = request.query_params.get("user")
-      current_user_param = request.query_params.get("current_user")
+    opponent_param = request.query_params.get("user")
+    current_user_param = request.query_params.get("current_user")
 
+    current_user = User.objects.get(username = current_user_param)
+
+    try: 
+      other_user = User.objects.get(username = opponent_param)
+
+    except User.DoesNotExist:
+      other_user = None
+
+
+    if other_user != None:
+      usr = UserModelSerializer(other_user).data
       opponent = User.objects.get(username = opponent_param)
-      current_user = User.objects.get(username = current_user_param)
 
+      friend_result = True
       try:
-          friend = BetFriend.objects.get(Q(Q(user_a = opponent) & Q(user_b = current_user)) | Q(Q(user_a = current_user) & Q(user_b = opponent)))
+        friend = BetFriend.objects.get(Q(Q(user_a = opponent) & Q(user_b = current_user)) | Q(Q(user_a = current_user) & Q(user_b = opponent)))
       except BetFriend.DoesNotExist:
-          friend = None
+        friend = None
 
-      friend_result = True if friend else False
+        friend_result = True if friend else False
 
 
+
+      requested_result = True    
       try:
-          requested = FriendRequest.objects.get(Q(Q(sent_by = opponent) & Q(received_by = current_user) & Q(is_accepted = False)) | Q(Q(received_by = opponent) & Q(sent_by = current_user) & Q(is_accepted = False)))
+        requested = FriendRequest.objects.get(Q(Q(sent_by = opponent) & Q(received_by = current_user) & Q(is_accepted = False)) | Q(Q(received_by = opponent) & Q(sent_by = current_user) & Q(is_accepted = False)))
+
       except FriendRequest.DoesNotExist:
-          requested = None
+        requested = None
 
-      requested_result = True if requested else False
+        requested_result = True if requested else False
+    else:
+      usr = "Not Found"
+      friend_result = None
+      requested_result = None
+    
 
+    
       # if result!= True:
       #   try:
       #     requested = FriendRequest.objects.get(Q(Q(sent_by = opponent) & Q(received_by = current_user)) | Q(Q(sent_by = current_user) & Q(received_by = opponent)))
@@ -133,29 +153,12 @@ def user_info(request):
 
       #   result = "Wating" if requested else False
 
-      data = {
-        "user": UserModelSerializer(opponent).data,
-        "friendship": friend_result,
-        "requested": requested_result
-      }
+    data = {
+        "user": usr,
+        "requested": requested_result,
+        "friendship": friend_result
+    }
 
-      return Response(data)
+    return Response(data)
 
-@api_view(["GET"])
-def user_live(request):
-      # get http request params
-      user_param = request.query_params.get("user")
-      current_user_param = request.query_params.get("current_user")
-
-      try:
-          user = User.objects.get(username = user_param)
-      except User.DoesNotExist:
-          user = User.objects.get(username = current_user_param)
-
-
-      data = {
-        "user": UserModelSerializer(user).data,
-      }
-
-      return Response(data)
 

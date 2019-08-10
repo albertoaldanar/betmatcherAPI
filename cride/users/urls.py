@@ -9,7 +9,7 @@ from rest_framework.routers import DefaultRouter
 #   path("users/signup", signup)
 # ]
 #DRF
-from cride.users.views import user_info, user_live
+from cride.users.views import user_info
 from .views import users as user_views
 
 router = DefaultRouter()
@@ -18,5 +18,4 @@ router.register(r"users", user_views.UserViewSet, basename = "users")
 urlpatterns= [
   path("", include(router.urls)),
   path("user_info/", user_info),
-  path("user_live/", user_live)
 ]
