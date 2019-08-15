@@ -1,5 +1,4 @@
 """Development settings."""
-
 from .base import *  # NOQA
 from .base import env
 
@@ -15,7 +14,8 @@ ALLOWED_HOSTS = [
     "192.168.0.4",
     "192.168.8.10",
     "10.188.241.209",
-    "192.168.1.68"
+    "192.168.1.68",
+    "192.168.8.4"
 ]
 
 # Cache

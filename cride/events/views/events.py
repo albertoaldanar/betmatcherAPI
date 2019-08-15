@@ -17,12 +17,12 @@ from cride.events.serializers import(
   SportDesignModelSerializer,
   BannerModelSerializer
 )
-from cride.matches.serializers import RequestModelSerializer
+from cride.matches.serializers import RequestModelSerializer, MatchModelSerializer
 #Utilities
 from heapq import nlargest
 #Models
 from cride.events.models import League, Event, Sport, Banner
-from cride.matches.models import Request
+from cride.matches.models import Request, Match
 from cride.users.models import User
 
 
@@ -93,6 +93,28 @@ def top_events(request):
       data = {
         "top_events": EventDesignModelSerializer(top_events, many= True).data,
         "sports": SportDesignModelSerializer(sports, many = True).data
+      }
+
+      return Response(data)
+
+
+@api_view(["GET"])
+def user_activity(request):
+      event_param = request.query_params.get("event")
+      event = Event.objects.get(name = event_param)
+
+      # req_local = Request.objects.filter(back_team = event.local.name)[:10]
+      # req_draw = Request.objects.filter(back_team = event.local.name)[:10]
+      requests = Request.objects.filter(event = event)[:10]
+      matches_local = Match.objects.filter(event = event, lay_team = event.local.name)[:10]
+      matches_draw = Match.objects.filter(event = event, lay_team = "Draw" )[:10]
+      matches_visit = Match.objects.filter(event = event, lay_team = event.visit.name)[:10]
+
+      data = {
+        "requests": RequestModelSerializer(requests, many= True).data,
+        "matches_visit": MatchModelSerializer(matches_visit, many = True).data,
+        "matches_local": MatchModelSerializer(matches_local, many = True).data,
+        "matches_draw": MatchModelSerializer(matches_draw, many = True).data,
       }
 
       return Response(data)

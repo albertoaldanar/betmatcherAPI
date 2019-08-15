@@ -16,11 +16,11 @@ from users.serializers import (
   UserSignUpSerializer,
   AccountVerificationSerializer
 )
-from cride.matches.serializers import RequestModelSerializer
+from cride.matches.serializers import RequestModelSerializer, MatchModelSerializer
 from cride.betfriends.serializers import BetFriendModelSerializer
 #models
 from cride.users.models import User
-from cride.matches.models import Request
+from cride.matches.models import Request, Match
 from cride.betfriends.models import BetFriend, FriendRequest
 
 class UserViewSet(mixins.RetrieveModelMixin,
@@ -161,4 +161,22 @@ def user_info(request):
 
     return Response(data)
 
+
+@api_view(["GET"])
+def user_records(request):
+    current_user_param = request.query_params.get("current_user")
+    current_user = User.objects.get(username = current_user_param)
+
+    try:
+      finished_trades = Match.objects.filter(event__is_finished = False)
+    except Match.DoesNotExist: 
+      finished_trades = None
+
+    response = MatchModelSerializer(finished_trades, many = True) if finished_trades else "Not trades yet" 
+
+    data = {
+      "finished_trades": response.data
+    }
+
+    return Response(data)
 

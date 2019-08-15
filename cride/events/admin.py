@@ -74,64 +74,66 @@ class EventAdmin(admin.ModelAdmin):
           unmatched_user.save()
 
 
-    def payment(match, req, event):
+    def payment(matches, req, event):
+
+      for m in matches:  
 
           return_unmatched(req)
 
-          back_user = match.back_user.profile
-          lay_user = match.lay_user.profile
+          back_user = m.back_user.profile
+          lay_user = m.lay_user.profile
 
-          def save_users(user_a, user_b, match):
+          def save_users(user_a, user_b, m):
             user_a.save()
             user_b.save()
-            match.save()
+            m.save()
 
           def stats_and_pay(winOrBack, loseOrLay, draw):
             if draw:
-                if match.quote > 0:
-                    add_quote = [match.request.amount, (match.request.amount - match.quote)] if winOrBack.username == match.back_user.username else [(match.request.amount - match.quote), match.request.amount]
+                if m.quote > 0:
+                    add_quote = [m.request.amount, (m.request.amount - m.quote)] if winOrBack.username == m.back_user.username else [(m.request.amount - m.quote), m.request.amount]
 
                     winOrBack.coins += add_quote[0]
                     loseOrLay.coins += add_quote[1]
                     winOrBack.draw += 1
                     loseOrLay.draw += 1
-                    match.draw = True
-                    save_users(winOrBack, loseOrLay, match)
+                    m.draw = True
+                    save_users(winOrBack, loseOrLay, m)
                 else:
-                    add_quote = [(match.request.amount + (match.quote * -1)), match.request.amount] if loseOrLay.username == match.lay_user.username else [match.request.amount, (match.request.amount + (match.quote * -1))]
+                    add_quote = [(m.request.amount + (m.quote * -1)), m.request.amount] if loseOrLay.username == m.lay_user.username else [m.request.amount, (m.request.amount + (m.quote * -1))]
 
                     winOrBack.coins += add_quote[1]
                     loseOrLay.coins += add_quote[0]
                     winOrBack.draw += 1
                     loseOrLay.draw += 1
-                    match.draw = True
-                    save_users(winOrBack, loseOrLay, match)
+                    m.draw = True
+                    save_users(winOrBack, loseOrLay, m)
             else:
-                winOrBack.coins += match.amount
+                winOrBack.coins += m.amount
                 winOrBack.won += 1
                 loseOrLay.lost += 1
-                match.winner = winOrBack.username
-                match.looser = loseOrLay.username
-                save_users(winOrBack, loseOrLay, match)
+                m.winner = winOrBack.username
+                m.looser = loseOrLay.username
+                save_users(winOrBack, loseOrLay, m)
 
           def get_relation():
               #local vs visit
-              if match.back_team == event.local.name and match.lay_team == event.visit.name:
+              if m.back_team == event.local.name and m.lay_team == event.visit.name:
                   analyse_score(back_user, lay_user, None)
-              elif match.back_team == event.visit.name and match.lay_team == event.local.name:
+              elif m.back_team == event.visit.name and m.lay_team == event.local.name:
                   analyse_score(lay_user, back_user, None)
 
               #local vs draw
-              elif match.back_team == event.local.name and match.lay_team == "Draw":
+              elif m.back_team == event.local.name and m.lay_team == "Draw":
                   analyse_score(back_user, None, lay_user)
-              elif match.back_team == "Draw" and match.lay_team == event.local.name:
+              elif m.back_team == "Draw" and m.lay_team == event.local.name:
                   analyse_score(lay_user, None, back_user)
 
               #visit vs draw
-              elif match.back_team == event.visit.name and match.lay_team == "Draw":
+              elif m.back_team == event.visit.name and m.lay_team == "Draw":
                   analyse_score(None, back_user, lay_user)
 
-              elif match.back_team == "Draw" and match.lay_team == event.visit.name:
+              elif m.back_team == "Draw" and m.lay_team == event.visit.name:
                   analyse_score(None, lay_user, back_user)
 
 
@@ -170,12 +172,12 @@ class EventAdmin(admin.ModelAdmin):
         req = Request.objects.filter(event__id = event.id, is_matched = False)
 
         try:
-          match = Match.objects.get(event__id = event.id)
+          matches = Match.objects.filter(event__id = event.id)
         except Match.DoesNotExist:
-          match = None
+          matches = None
 
-        if match:
-            payment(match, req, event)
+        if matches:
+            payment(matches, req, event)
         else:
             return_unmatched(req)
 
