@@ -168,14 +168,15 @@ def user_records(request):
     current_user = User.objects.get(username = current_user_param)
 
     try:
-      finished_trades = Match.objects.filter(event__is_finished = False)
+      finished_trades = Match.objects.filter(Q(Q(back_user = current_user) | Q(lay_user = current_user)) & Q(event__is_finished = True))
     except Match.DoesNotExist: 
       finished_trades = None
 
-    response = MatchModelSerializer(finished_trades, many = True) if finished_trades else "Not trades yet" 
+    response = MatchModelSerializer(finished_trades, many = True).data if finished_trades else "No trades yet" 
 
     data = {
-      "finished_trades": response.data
+      "finished_trades": response,
+      "user": UserModelSerializer(current_user).data
     }
 
     return Response(data)
