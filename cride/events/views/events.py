@@ -105,10 +105,10 @@ def user_activity(request):
 
       # req_local = Request.objects.filter(back_team = event.local.name)[:10]
       # req_draw = Request.objects.filter(back_team = event.local.name)[:10]
-      requests = Request.objects.filter(event = event)[:10]
-      matches_local = Match.objects.filter(event = event, lay_team = event.local.name)[:10]
-      matches_draw = Match.objects.filter(event = event, lay_team = "Draw" )[:10]
-      matches_visit = Match.objects.filter(event = event, lay_team = event.visit.name)[:10]
+      requests = Request.objects.filter(event = event).order_by("-id")[:10]
+      matches_local = Match.objects.filter(event = event, lay_team = event.local.name).order_by("-id")[:10]
+      matches_draw = Match.objects.filter(event = event, lay_team = "Draw" ).order_by("-id")[:10]
+      matches_visit = Match.objects.filter(event = event, lay_team = event.visit.name).order_by("-id")[:10]
 
       data = {
         "requests": RequestModelSerializer(requests, many= True).data,
