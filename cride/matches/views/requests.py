@@ -104,6 +104,16 @@ def direct_bets(request):
     return Response(data)
 
 
+@api_view(["PUT"])
+def decline_bet(request):
+    bet_request = Request.objects.get(id = request.data["declined_id"])
+    bet_request.declined = True
+
+    bet_request.save()
+
+    return Response("Updated")
+
+
 @api_view(["DELETE"])
 def cancel_request(request):
     req = Request.objects.get(id = request.data["req"])

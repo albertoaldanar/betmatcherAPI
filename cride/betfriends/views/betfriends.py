@@ -82,7 +82,7 @@ def betfriends_data(request):
       received_requests = FriendRequest.objects.filter(received_by__username = current_user, is_accepted = False).order_by("created")
       sent_requests = FriendRequest.objects.filter(sent_by__username = current_user, is_accepted = False).order_by("created")
 
-      direct_bets = Request.objects.filter(opponent = current_user, is_public = False, is_matched = False)
+      direct_bets = Request.objects.filter(opponent = current_user, is_public = False, is_matched = False, declined = False)
 
       data = {
         "betfriends": BetFriendModelSerializer(betfriends, many= True).data,
