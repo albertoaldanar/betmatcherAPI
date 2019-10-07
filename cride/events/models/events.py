@@ -17,6 +17,9 @@ class Event(BetmatcherModel):
     "events.Sport",
     on_delete = models.CASCADE
   )
+  
+  img = models.TextField(max_length = 500, blank = True, null= True)
+
   score_local = models.PositiveIntegerField(default = 0)
   score_visit = models.PositiveIntegerField(default = 0)
 
