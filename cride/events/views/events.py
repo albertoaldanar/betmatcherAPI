@@ -54,7 +54,8 @@ def home_data(request):
 
       events = Event.objects.filter(
         top_event = True,
-        is_finished = False
+        is_finished = False, 
+        in_play = False
       ).order_by("date")
 
       leagues = League.objects.filter(show = True).order_by('order')
@@ -89,7 +90,8 @@ def top_events(request):
 
       top_events = Event.objects.filter(
         top_event = True,
-        is_finished = False
+        is_finished = False, 
+        in_play = False,
       ).order_by("date")
 
       data = {
