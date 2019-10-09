@@ -9,7 +9,7 @@ SECRET_KEY = env('DJANGO_SECRET_KEY', default='PB3aGvTmCkzaLGRAxDc3aMayKTPTDd5us
 ALLOWED_HOSTS = [
     "localhost",
     "0.0.0.0",
-    "192.168.1.27",
+    "192.168.8.13",
     "192.168.0.3",
     "192.168.0.4",
     "192.168.8.10",

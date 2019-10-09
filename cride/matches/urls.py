@@ -4,7 +4,7 @@ from django.urls import path, include
 #Views
 from cride.matches.views import matches, post_match
 from .views import requests as requests_views
-from cride.matches.views import post_request, cancel_request, direct_bets, decline_bet
+from cride.matches.views import post_request, cancel_request, direct_bets, decline_bet, users_to_match
 #DRF
 from rest_framework.routers import DefaultRouter
 
@@ -24,6 +24,7 @@ urlpatterns = [
   path("post_match/", post_match),
   path("direct_bets/", direct_bets),
   path("decline_bet/", decline_bet),
+  path("users_to_match/", users_to_match),
   path("", include(router.urls))
 
 ]

@@ -62,6 +62,29 @@ class RequestViewSet(mixins.CreateModelMixin,
 
   #   return r
 
+@api_view(["GET"])
+def users_to_match(request):
+      back_user = request.query_params.get("back_user")
+      user = User.objects.get(username = back_user)
+
+      back_team = request.query_params.get("back_team")
+      event = request.query_params.get("event")
+      reqs = Request.objects.filter(
+          ~Q(back_team = back_team),
+          ~Q(back_user__username = back_user),
+          is_public = True,
+          is_matched = False,
+          event__name = event,
+      )
+      
+      data = {
+        "reqs": RequestModelSerializer(reqs, many = True).data, 
+        "user": UserModelSerializer(user).data,
+      }
+
+      return Response(data)
+
+
 @api_view(["POST"])
 def post_request(request):
       back_user = User.objects.get(username = request.data["back_user"])

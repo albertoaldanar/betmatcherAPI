@@ -18,6 +18,7 @@ from cride.events.serializers import(
   BannerModelSerializer
 )
 from cride.matches.serializers import RequestModelSerializer, MatchModelSerializer
+from cride.users.serializers import UserModelSerializer
 #Utilities
 from heapq import nlargest
 #Models
@@ -76,7 +77,8 @@ def home_data(request):
         "leagues": LeagueModelSerializer(leagues, many = True).data,
         "top_request": RequestModelSerializer(rqs, many = True).data,
         "sports": SportDesignModelSerializer(sports, many = True).data,
-        "banners": BannerModelSerializer(banners, many = True).data
+        "banners": BannerModelSerializer(banners, many = True).data,
+        "user": UserModelSerializer(user).data,
       }
       return Response(data)
 
