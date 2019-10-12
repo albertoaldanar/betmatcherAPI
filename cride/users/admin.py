@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 #Models
-from cride.users.models import User, Profile
+from cride.users.models import User, Profile, Prize
 
 
 class CustomUserAdmin(UserAdmin):
@@ -20,5 +20,15 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ("username", "won", "draw", "lost", "coins")
     search_fields = ("user__email", "user__first_name", "user__last_name")
     list_filter = ("country",)
+
+
+
+@admin.register(Prize)
+class PrizeAdmin(admin.ModelAdmin):
+  list_display= (
+    "name", "description",
+    "price"
+  )
+
 
 admin.site.register(User, CustomUserAdmin)
