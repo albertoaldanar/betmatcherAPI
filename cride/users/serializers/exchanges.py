@@ -12,11 +12,11 @@ from cride.users.serializers import (
 
 class ExchangeModelSerializer(serializers.ModelSerializer):
 
- 	user = UserModelSerializer(read_only = True)
-  	prize = PrizeModelSerializer(read_only = True)
+  user = UserModelSerializer(read_only= True)
+  prize = PrizeModelSerializer(read_only= True)
 
-  	class Meta:
-   	 	model = Exchange
-    	fields = (
-      		"user", "prize", "date",
-    	)
+  class Meta:
+   	model = Exchange
+   	fields = (
+      "user", "prize", "date",
+    )

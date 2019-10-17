@@ -10,7 +10,7 @@ from operator import itemgetter, attrgetter
 #Django
 from django.db.models import Q
 #Serializer
-from cride.users.serializers import PrizeModelSerializer
+from cride.users.serializers import PrizeModelSerializer, ExchangeModelSerializer
 #Utilities
 from heapq import nlargest
 #Models
@@ -34,5 +34,14 @@ def pay_prize(request):
 
     current_user.profile.coins -= prize.price
     current_user.save()
+
+    return Response(data)
+
+
+@api_view(["GET"])
+def get_all_prizes(request):
+
+    response = Prize.objects.all()
+    data = {"prizes": PrizeModelSerializer(response, many= True).data}
 
     return Response(data)
