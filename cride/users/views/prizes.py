@@ -22,18 +22,21 @@ def pay_prize(request):
     current_user = User.objects.get(username = request.data["current_user"])
     prize = Prize.objects.get(name = request.data["prize"])
 
+    user_coins = current_user.profile
+
     date = request.data["date"]
+    coins = request.data["coins"]
+
+    user_coins.coins -= prize.price
+    user_coins.save()
 
     response = Exchange.objects.create(
-        user = current_user,
-        prize = prize, 
-        date = date
+      user = current_user,
+      prize = prize, 
+      date = date
     )
 
     data = {"Exchange": ExchangeModelSerializer(response).data}
-
-    current_user.profile.coins -= prize.price
-    current_user.save()
 
     return Response(data)
 
