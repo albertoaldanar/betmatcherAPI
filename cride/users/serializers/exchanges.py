@@ -18,5 +18,5 @@ class ExchangeModelSerializer(serializers.ModelSerializer):
   class Meta:
    	model = Exchange
    	fields = (
-      "user", "prize", "date",
+      "id", "user", "prize", "date",
     )

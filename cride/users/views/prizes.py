@@ -48,3 +48,4 @@ def get_all_prizes(request):
     data = {"prizes": PrizeModelSerializer(response, many= True).data}
 
     return Response(data)
+
