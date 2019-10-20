@@ -17,9 +17,12 @@ class Event(BetmatcherModel):
     "events.Sport",
     on_delete = models.CASCADE
   )
+
+  time = models.CharField(null = True, blank = True, max_length = 30)
+  minute = models.SmallIntegerField(null = True, blank = True)
   
   img = models.TextField(max_length = 500, blank = True, null= True)
-
+  
   score_local = models.PositiveIntegerField(default = 0)
   score_visit = models.PositiveIntegerField(default = 0)
 
@@ -28,6 +31,7 @@ class Event(BetmatcherModel):
     on_delete = models.CASCADE,
     related_name = "local_team"
   )
+
   visit = models.ForeignKey(
     "events.Team",
     on_delete = models.CASCADE,
@@ -38,6 +42,7 @@ class Event(BetmatcherModel):
     "event_date",
     help_text = "Date of the event"
   )
+
   traded = models.PositiveIntegerField(default = 0)
   top_bet = models.PositiveIntegerField(default = 0)
   matched_bets = models.PositiveIntegerField(default = 0)
