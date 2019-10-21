@@ -5,6 +5,7 @@ from django.contrib import admin
 #model
 from cride.events.models import Sport, League, Team, Event, Banner
 from cride.matches.models import Match, Request
+import time, threading
 
 @admin.register(Sport)
 class SportAdmin(admin.ModelAdmin):
@@ -50,21 +51,62 @@ class TeamAdmin(admin.ModelAdmin):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
   list_display= (
+    "in_play",
     "is_finished",
     "league",
     "local","visit",
-    "date", "traded",
+    "traded",
     "matched_bets", "unmatched_bets"
   )
   list_filter = (
-    "top_event",
+    "in_play", "is_finished"
   )
   search_fields = ("top_event", "league")
 
-  actions = ["finish_event"]
+  actions = ["finish_event", "start_clock", "second_time"]
+
+
+  def start_clock(self, request, queryset):
+    queryset.update(in_play = True)
+    WAIT_SECONDS = 2
+
+    for event in queryset:
+      def start():
+          t =  threading.Timer(WAIT_SECONDS, start)
+
+          if event.minute == 45:
+            event.time = "Half time"
+            event.save()
+
+            ticker = threading.Event();
+            ticker.wait(4)
+
+          else:
+            event.minute += 1
+            event.save()
+            print(event.minute)
+            t.start()
+          
+      start()
+
+  def second_time(self, request, queryset):
+    queryset.update(in_play = True, minute = 45)
+
+    for event in queryset:
+      def start():
+        t =  threading.Timer(2, start)
+        event.time = ""
+        event.minute += 1
+        event.save()
+
+        print(event.minute)
+        t.start()
+
+      start()
+
 
   def finish_event(self, request, queryset):
-    queryset.update(is_finished = True, in_play = False)
+    queryset.update(is_finished = True, in_play = False, minute = 90)
 
 
     def return_unmatched(req):

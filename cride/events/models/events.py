@@ -19,7 +19,7 @@ class Event(BetmatcherModel):
   )
 
   time = models.CharField(null = True, blank = True, max_length = 30)
-  minute = models.SmallIntegerField(null = True, blank = True)
+  minute = models.SmallIntegerField(default = 0)
   
   img = models.TextField(max_length = 500, blank = True, null= True)
   
