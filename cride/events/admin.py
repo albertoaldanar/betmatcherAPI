@@ -66,6 +66,19 @@ class EventAdmin(admin.ModelAdmin):
   actions = ["finish_event", "start_clock", "second_time"]
 
 
+
+
+  # def start_or_stop(req): 
+  #   WAIT_SECONDS = 2
+  #   t =  threading.Timer(WAIT_SECONDS, start_or_stop)
+
+  #   if req == "stop":
+  #     t.cancel()
+  #   else:
+  #     t.start()
+
+  t =  threading.Timer(1, None)
+
   def start_clock(self, request, queryset):
     queryset.update(in_play = True)
     WAIT_SECONDS = 2
@@ -86,18 +99,23 @@ class EventAdmin(admin.ModelAdmin):
             event.save()
             print(event.minute)
             t.start()
-          
       start()
 
-  def second_time(self, request, queryset):
+  def second_time(self, request, queryset, *args, **kwds):
     queryset.update(in_play = True, minute = 45)
+    WAIT_SECONDS = 2
 
     for event in queryset:
       def start():
-        t =  threading.Timer(2, start)
-        event.time = ""
-        event.minute += 1
-        event.save()
+        t =  threading.Timer(WAIT_SECONDS, start)
+
+        if event.minute == 90: 
+          t.cancel()
+
+        else:
+          event.time = ""
+          event.minute += 1
+          event.save()
 
         print(event.minute)
         t.start()
@@ -107,7 +125,7 @@ class EventAdmin(admin.ModelAdmin):
 
   def finish_event(self, request, queryset):
     queryset.update(is_finished = True, in_play = False, minute = 90)
-
+ 
 
     def return_unmatched(req):
         for r in req:
@@ -211,6 +229,8 @@ class EventAdmin(admin.ModelAdmin):
           get_relation()
 
     for event in queryset:
+        second_time("end")
+
         req = Request.objects.filter(event__id = event.id, is_matched = False)
 
         try:
