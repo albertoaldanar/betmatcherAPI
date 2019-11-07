@@ -12,6 +12,8 @@ class League(BetmatcherModel):
     on_delete = models.CASCADE
   )
   show = models.BooleanField(default = True)
+  top = models.BooleanField(default = False)
+
   order = models.PositiveIntegerField(null = True)
 
   image = models.ImageField(

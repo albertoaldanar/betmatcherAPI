@@ -66,11 +66,10 @@ class EventAdmin(admin.ModelAdmin):
   actions = ["finish_event", "start_clock", "second_time"]
 
 
-  t =  threading.Timer(1, None)
 
   def start_clock(self, request, queryset):
-    queryset.update(in_play = True)
-    WAIT_SECONDS = 10
+    queryset.update(in_play = True, minute = -1)
+    WAIT_SECONDS = 60
 
     for event in queryset:
       def start():
@@ -79,19 +78,21 @@ class EventAdmin(admin.ModelAdmin):
           if event.minute == 45:
             event.time = "Half time"
             event.save()
-
             ticker = threading.Event();
+            t.cancel()
 
           else:
+            # event.score_local = event.score_local
+            # event.score_visit = event.score_visit
             event.minute += 1
-            event.save()
-            print(event.minute)
+            print(event.minute, event.score_local)
             t.start()
+            event.save()
       start()
 
   def second_time(self, request, queryset, *args, **kwds):
-    queryset.update(in_play = True, minute = 45)
-    WAIT_SECONDS = 60
+    queryset.update(in_play = True, minute = 44)
+    WAIT_SECONDS = 15
 
     for event in queryset:
       def start():
