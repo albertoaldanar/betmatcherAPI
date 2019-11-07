@@ -66,14 +66,14 @@ class EventAdmin(admin.ModelAdmin):
   actions = ["finish_event", "start_clock", "second_time"]
 
 
-
   def start_clock(self, request, queryset):
     queryset.update(in_play = True, minute = -1)
-    WAIT_SECONDS = 60
+    WAIT_SECONDS = 15
 
     for event in queryset:
       def start():
-          t =  threading.Timer(WAIT_SECONDS, start)
+      
+          t = threading.Timer(WAIT_SECONDS, start)
 
           if event.minute == 45:
             event.time = "Half time"
@@ -82,8 +82,6 @@ class EventAdmin(admin.ModelAdmin):
             t.cancel()
 
           else:
-            # event.score_local = event.score_local
-            # event.score_visit = event.score_visit
             event.minute += 1
             print(event.minute, event.score_local)
             t.start()
@@ -96,7 +94,10 @@ class EventAdmin(admin.ModelAdmin):
 
     for event in queryset:
       def start():
-        t =  threading.Timer(WAIT_SECONDS, start)
+        event.score_local 
+        h = event.save()
+
+        t =  threading.Timer(WAIT_SECONDS, start, [h])
 
         if event.minute == 90: 
           t.cancel()
@@ -122,7 +123,7 @@ class EventAdmin(admin.ModelAdmin):
           unmatched_user = r.back_user.profile
           unmatched_user.coins += r.amount
           unmatched_user.save()
-
+          r.delete()
 
     def payment(matches, req, event):
 
@@ -219,7 +220,6 @@ class EventAdmin(admin.ModelAdmin):
           get_relation()
 
     for event in queryset:
-        second_time("end")
 
         req = Request.objects.filter(event__id = event.id, is_matched = False)
 
