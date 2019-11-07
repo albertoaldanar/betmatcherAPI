@@ -64,8 +64,8 @@ class EventModelSerializer(serializers.ModelSerializer):
     fields= (
       "name", "date", "traded", "unmatched_bets",
       "matched_bets", "score_local", "score_visit",
-      "sport", "league", "top_bet", "name", "in_play",
-      "local", "visit", "is_finished", "img", "time", "minute",
+      "sport", "league", "top_bet", "name", "in_play", "half_time",
+      "local", "visit", "is_finished", "img", "time", "minute", "local_tennis", "visit_tennis"
     )
 
 

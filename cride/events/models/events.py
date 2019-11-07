@@ -8,6 +8,7 @@ class Event(BetmatcherModel):
   top_event = models.BooleanField(default = False)
   in_play = models.BooleanField(default = False)
   is_finished = models.BooleanField(default = False)
+  half_time = models.BooleanField(default = False)
   name = models.CharField(max_length = 30, unique = False, null = True)
   league = models.ForeignKey(
     "events.League",
@@ -25,6 +26,9 @@ class Event(BetmatcherModel):
   
   score_local = models.PositiveIntegerField(default = 0)
   score_visit = models.PositiveIntegerField(default = 0)
+
+  local_tennis = models.CharField(null = True, blank = True, max_length = 30)
+  visit_tennis = models.CharField(null = True, blank = True, max_length = 30)
 
   local = models.ForeignKey(
     "events.Team",

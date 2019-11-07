@@ -66,22 +66,11 @@ class EventAdmin(admin.ModelAdmin):
   actions = ["finish_event", "start_clock", "second_time"]
 
 
-
-
-  # def start_or_stop(req): 
-  #   WAIT_SECONDS = 2
-  #   t =  threading.Timer(WAIT_SECONDS, start_or_stop)
-
-  #   if req == "stop":
-  #     t.cancel()
-  #   else:
-  #     t.start()
-
   t =  threading.Timer(1, None)
 
   def start_clock(self, request, queryset):
     queryset.update(in_play = True)
-    WAIT_SECONDS = 2
+    WAIT_SECONDS = 10
 
     for event in queryset:
       def start():
@@ -92,7 +81,6 @@ class EventAdmin(admin.ModelAdmin):
             event.save()
 
             ticker = threading.Event();
-            ticker.wait(4)
 
           else:
             event.minute += 1
@@ -103,7 +91,7 @@ class EventAdmin(admin.ModelAdmin):
 
   def second_time(self, request, queryset, *args, **kwds):
     queryset.update(in_play = True, minute = 45)
-    WAIT_SECONDS = 2
+    WAIT_SECONDS = 60
 
     for event in queryset:
       def start():
@@ -114,6 +102,7 @@ class EventAdmin(admin.ModelAdmin):
 
         else:
           event.time = ""
+          event.half_time = False
           event.minute += 1
           event.save()
 
@@ -124,7 +113,7 @@ class EventAdmin(admin.ModelAdmin):
 
 
   def finish_event(self, request, queryset):
-    queryset.update(is_finished = True, in_play = False, minute = 90)
+    queryset.update(is_finished = True, in_play = False)
  
 
     def return_unmatched(req):
