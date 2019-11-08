@@ -56,10 +56,10 @@ class EventAdmin(admin.ModelAdmin):
     "league",
     "local","visit",
     "traded",
-    "matched_bets", "unmatched_bets"
+    "matched_bets", "unmatched_bets", "minute"
   )
   list_filter = (
-    "in_play", "is_finished"
+    "in_play", "is_finished", "sport"
   )
   search_fields = ("top_event", "league")
 
@@ -71,21 +71,29 @@ class EventAdmin(admin.ModelAdmin):
     WAIT_SECONDS = 15
 
     for event in queryset:
+      lc = event.score_local
+      vis = event.score_visit
+      event.save()
+
       def start():
-      
+
           t = threading.Timer(WAIT_SECONDS, start)
 
           if event.minute == 45:
             event.time = "Half time"
             event.save()
-            ticker = threading.Event();
+            # ticker = threading.Event();
             t.cancel()
 
           else:
             event.minute += 1
+            event.score_local = lc
+            event.score_visit = vis
             print(event.minute, event.score_local)
-            t.start()
+
             event.save()
+            t.start()
+            
       start()
 
   def second_time(self, request, queryset, *args, **kwds):
