@@ -12,6 +12,6 @@ class TeamModelSerializer(serializers.ModelSerializer):
     """Meta class"""
     model = Team
     fields= (
-      "name", "league",
+      "name", "league", "short_name"
     )
 

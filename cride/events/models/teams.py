@@ -11,6 +11,7 @@ class Team(BetmatcherModel):
     "events.League",
     on_delete = models.CASCADE
   )
+  short_name = models.CharField(null = True, blank = True, max_length = 4)
 
 
   def __str__(self):

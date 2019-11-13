@@ -12,7 +12,6 @@ class SportAdmin(admin.ModelAdmin):
   list_display= (
     "name",
     "show",
-    "icon"
   )
   search_fields = ("name",)
 
@@ -63,20 +62,63 @@ class EventAdmin(admin.ModelAdmin):
   )
   search_fields = ("top_event", "league")
 
-  actions = ["finish_event", "start_clock", "second_time"]
+  actions = ["finish_event", "start_clock", "second_time", "start", "stop"]
+
+  global clock
+  def clock(event, signal): 
+
+      WAIT_SECONDS = 10 if signal == "Start" else 1
+      
+      def start_n():
+          t = threading.Timer(WAIT_SECONDS, start_n)
+
+          if signal == "Start":
+            event.minute += 1
+            print(event.minute, signal)
+          
+            event.save()
+
+            t.start()
+
+          else: 
+            t.cancel()
+      start_n()
+
+
+  def start(self, request, queryset):
+    
+    for event in queryset:
+
+      result = False if event.half_time == True else True
+      queryset.update(half_time = result)
+
+      def start_n():
+          t = threading.Timer(10, start_n)
+
+          if result == False:
+            t.cancel()
+
+          else: 
+            event.minute += 1
+            print(event.minute)
+          
+            # event.save()
+            t.start()
+      start_n()
+
+
+  def stop(self, request, queryset):
+    for event in queryset:
+      clock(event, "Stop")
 
 
   def start_clock(self, request, queryset):
     queryset.update(in_play = True, minute = -1)
-    WAIT_SECONDS = 15
+    WAIT_SECONDS = 10
 
     for event in queryset:
-      lc = event.score_local
-      vis = event.score_visit
-      event.save()
-
+    
       def start():
-
           t = threading.Timer(WAIT_SECONDS, start)
 
           if event.minute == 45:
@@ -87,13 +129,12 @@ class EventAdmin(admin.ModelAdmin):
 
           else:
             event.minute += 1
-            event.score_local = lc
-            event.score_visit = vis
-            print(event.minute, event.score_local)
+          
+            print(event.minute)
 
-            event.save()
             t.start()
-            
+
+          event.save()
       start()
 
   def second_time(self, request, queryset, *args, **kwds):
@@ -116,8 +157,8 @@ class EventAdmin(admin.ModelAdmin):
           event.minute += 1
           event.save()
 
-        print(event.minute)
-        t.start()
+          print(event.minute)
+          t.start()
 
       start()
 

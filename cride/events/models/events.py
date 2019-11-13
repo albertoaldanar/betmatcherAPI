@@ -9,6 +9,9 @@ class Event(BetmatcherModel):
   in_play = models.BooleanField(default = False)
   is_finished = models.BooleanField(default = False)
   half_time = models.BooleanField(default = False)
+  second_time = models.BooleanField(default = False)
+
+  added_time = models.SmallIntegerField(default = 0)
   name = models.CharField(max_length = 30, unique = False, null = True)
   league = models.ForeignKey(
     "events.League",
