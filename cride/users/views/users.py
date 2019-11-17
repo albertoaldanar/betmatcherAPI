@@ -45,6 +45,15 @@ class UserViewSet(mixins.RetrieveModelMixin,
 
   @action(detail=False, methods=['post'])
   def login(self, request):
+      notification_token = request.query_params.get("notification_token")
+      current_user_param = request.data["username"]
+      current_user = User.objects.get(username = current_user_param)
+
+      profile = current_user.profile
+
+      profile.notification_token = notification_token
+      profile.save()
+      
       serealizer = UserLoginSerializer(data = request.data)
       serealizer.is_valid(raise_exception =True)
       user, token = serealizer.save()

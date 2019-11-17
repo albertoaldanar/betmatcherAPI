@@ -15,6 +15,12 @@ class Profile(BetmatcherModel):
   country = models.TextField(max_length= 500, blank = True)
   username = models.CharField(max_length = 20, blank = True, null = True)
 
+  notification_token = models.CharField(
+    "notification_token",
+    blank = True, null = True,
+    max_length = 50,
+  )
+
   #Stats
   lost = models.PositiveIntegerField(default = 0)
   won = models.PositiveIntegerField(default = 0)

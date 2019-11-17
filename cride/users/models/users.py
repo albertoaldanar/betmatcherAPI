@@ -15,6 +15,12 @@ class User(BetmatcherModel, AbstractUser):
     }
   )
 
+  notification_token = models.CharField(
+    "notification_token",
+    blank = True, null = True,
+    max_length = 50,
+  )
+
   country = models.CharField(
     "country",
     max_length = 15,
