@@ -32,7 +32,8 @@ class UserModelSerializer(serializers.ModelSerializer):
       "username",
       "first_name",
       "last_name",
-      "country"
+      "country", 
+      "notification_token"
     )
 
 class UserSignUpSerializer(serializers.Serializer):
@@ -50,6 +51,7 @@ class UserSignUpSerializer(serializers.Serializer):
 
   password = serializers.CharField(min_length=  8, max_length = 64)
   password_confirmation = serializers.CharField(min_length=  8, max_length = 64)
+  notification_token = serializers.CharField( max_length = 50)
 
 
   def validate(self, data):
@@ -64,7 +66,7 @@ class UserSignUpSerializer(serializers.Serializer):
   def create(self, data):
     data.pop("password_confirmation")
     user = User.objects.create_user(**data)
-    profile = Profile.objects.create(user = user, username = user.username, coins = 500, country = user.country)
+    profile = Profile.objects.create(user = user, username = user.username, coins = 500, country = user.country, notification_token = data["notification_token"])
     self.send_confrimation_email(user)
     jwt, created = Token.objects.get_or_create(user = user)
     return user, jwt.key
