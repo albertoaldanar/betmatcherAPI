@@ -65,8 +65,6 @@ class EventAdmin(admin.ModelAdmin):
   actions = ["finish_event",]
 
 
-
-
   def finish_event(self, request, queryset):
     queryset.update(is_finished = True, in_play = False)
  

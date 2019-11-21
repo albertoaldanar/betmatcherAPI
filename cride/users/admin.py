@@ -20,8 +20,12 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ("username", "won", "draw", "lost", "coins")
     search_fields = ("user__email", "user__first_name", "user__last_name")
     list_filter = ("country",)
+    actions = ["pay_users",]
 
-
+    def pay_users(self, request, queryset):
+      for user in queryset:
+        user.coins += 500
+        user.save()
 
 @admin.register(Prize)
 class PrizeAdmin(admin.ModelAdmin):
