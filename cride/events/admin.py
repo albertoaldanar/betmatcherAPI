@@ -45,6 +45,9 @@ class TeamAdmin(admin.ModelAdmin):
     "league"
   )
   search_fields = ("name",)
+  list_filter = (
+    "league__sport",
+  )
 
 
 @admin.register(Event)
