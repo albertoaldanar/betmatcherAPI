@@ -11,7 +11,7 @@ django==2.0.9
 django-environ==0.4.5
 
 #JWT
-pyjwt==1.7.1
+pyjwt==2.4.0
 
 #DRF
 djangorestframework==3.9.0
